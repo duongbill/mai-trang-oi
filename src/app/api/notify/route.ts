@@ -12,16 +12,20 @@ export async function POST(req: Request) {
 🎉 <b>TRANG VỪA CHỐT LỊCH HẸN RỒI!</b> 🎉
 ━━━━━━━━━━━━━━━━━━━━━━
 
-⏰ <b>Thời gian:</b> ${data.time || 'Chưa chọn'}
+⏰ <b>Giờ hẹn:</b> ${data.time || 'Chưa chọn'}
 ✨ <b>Tâm trạng / Vibe:</b> ${data.mood || 'Chưa chọn'}
-🍽️ <b>Món muốn ăn:</b> ${data.food || 'Chưa chọn'}${data.customFood ? `\n   └ Gợi ý thêm: <i>${data.customFood}</i>` : ''}
-📍 <b>Địa điểm tiếp theo:</b> ${data.activity || 'Chưa chọn'}
 
-📋 <b>Điều khoản đã chốt:</b>
+🍽️ <b>Bữa tối:</b> ${data.food || 'Chưa chọn'}
+   📍 <i>Chi tiết quán: ${data.foodDetail || 'Chưa chọn cụ thể'}</i>
+${data.customFood ? `   ✍️ <i>Gợi ý thêm: ${data.customFood}</i>\n` : ''}
+📍 <b>Sau bữa tối:</b> ${data.activity || 'Chưa chọn'}
+   🎬 <i>Chi tiết: ${data.activityDetail || 'Chưa chọn cụ thể'}</i>
+
+📋 <b>Điều khoản đã duyệt:</b>
         ✅ ${termsText}
 
 ━━━━━━━━━━━━━━━━━━━━━━
-🚀 <i>Lên đồ và chuẩn bị đón người đẹp thôi bro!</i>
+🚀 <i>Buổi hẹn đầu tiên — lên đồ thật bảnh và chuẩn bị đón người đẹp thôi bạn tôi ơi!</i>
     `.trim();
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
