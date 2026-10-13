@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+:root {
+  --pink-pastel: #fce7f3;
+  --pink-mid: #f9a8d4;
+  --pink-dark: #ec4899;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #ede9fe 100%);
+  min-height: 100vh;
+}
+
+/* Scrollbar đẹp */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #fce7f3; }
+::-webkit-scrollbar-thumb { background: #f9a8d4; border-radius: 3px; }
