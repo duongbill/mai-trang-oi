@@ -1,0 +1,1298 @@
+[
+  {
+    "id": "food-1",
+    "name": "Cơm thịt băm Hambagu",
+    "price": "120.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-2",
+    "name": "Cơm trà cá hồi Ochazuke",
+    "price": "100.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-3",
+    "name": "Canh sườn bò Galbitang kèm cơm",
+    "price": "270.000đ",
+    "rarity": "SỬ THI",
+    "category": "Lẩu & cháo",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-4",
+    "name": "Mì Kalguksu hải sản",
+    "price": "150.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-5",
+    "name": "Cơm gà Kung Pao",
+    "price": "95.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-6",
+    "name": "Cơm cuộn trứng Omurice",
+    "price": "75.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-7",
+    "name": "Cơm đậu hũ Mapo",
+    "price": "80.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-8",
+    "name": "Cơm heo xào gừng Shogayaki",
+    "price": "80.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-9",
+    "name": "Mì Dan Dan Tứ Xuyên",
+    "price": "160.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-10",
+    "name": "Cháo thịt nạc trứng bắc thảo",
+    "price": "50.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-11",
+    "name": "Cơm heo xào cay Jeyuk",
+    "price": "100.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-12",
+    "name": "Gà hầm sâm Samgyetang",
+    "price": "250.000đ",
+    "rarity": "SỬ THI",
+    "category": "Lẩu & cháo",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-13",
+    "name": "Bò bít tết",
+    "price": "180.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Nướng & chiên",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-14",
+    "name": "Bún thịt nướng",
+    "price": "40.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-15",
+    "name": "Cá hồi áp chảo",
+    "price": "190.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Nướng & chiên",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-16",
+    "name": "Mì Quảng",
+    "price": "50.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-17",
+    "name": "Salad cá ngừ",
+    "price": "110.000đ",
+    "rarity": "HIẾM",
+    "category": "Salad & món nhẹ",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-18",
+    "name": "Hủ tiếu",
+    "price": "60.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-19",
+    "name": "Salad quinoa đậu gà",
+    "price": "115.000đ",
+    "rarity": "HIẾM",
+    "category": "Chay · Salad & món nhẹ",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-20",
+    "name": "Bún măng vịt",
+    "price": "60.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-21",
+    "name": "Bún bò Huế",
+    "price": "50.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-22",
+    "name": "Cơm cá hồi teriyaki",
+    "price": "150.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-23",
+    "name": "Bún mọc",
+    "price": "60.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-24",
+    "name": "Bò lúc lắc",
+    "price": "85.000đ",
+    "rarity": "HIẾM",
+    "category": "Nướng & chiên",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-25",
+    "name": "Poke cá hồi",
+    "price": "160.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-26",
+    "name": "Bún mắm",
+    "price": "65.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-27",
+    "name": "Cơm rang dưa bò",
+    "price": "50.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-28",
+    "name": "Cơm lươn Nhật",
+    "price": "180.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-29",
+    "name": "Bún bò Nam Bộ",
+    "price": "70.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-30",
+    "name": "Mì bò Đài Loan",
+    "price": "85.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-31",
+    "name": "Bún đậu mắm tôm",
+    "price": "55.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-32",
+    "name": "Cơm bò nướng Hàn",
+    "price": "150.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-33",
+    "name": "Lẩu bò cá nhân",
+    "price": "160.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Lẩu & cháo",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-34",
+    "name": "Mì xào giòn",
+    "price": "80.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-35",
+    "name": "Bánh cuốn",
+    "price": "35.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-36",
+    "name": "Mì Ý hải sản",
+    "price": "160.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Pizza & pasta",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-37",
+    "name": "Phở cuốn",
+    "price": "70.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bánh mì & cuốn",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-38",
+    "name": "Sườn nướng BBQ",
+    "price": "230.000đ",
+    "rarity": "SỬ THI",
+    "category": "Nướng & chiên",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-39",
+    "name": "Phở gà",
+    "price": "55.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-40",
+    "name": "Bánh đa cua",
+    "price": "45.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-41",
+    "name": "Pizza hải sản",
+    "price": "160.000đ",
+    "rarity": "HIẾM",
+    "category": "Pizza & pasta",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-42",
+    "name": "Bánh xèo",
+    "price": "50.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-43",
+    "name": "Miến gà",
+    "price": "55.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-44",
+    "name": "Bánh canh giò heo",
+    "price": "55.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-45",
+    "name": "Miến lươn",
+    "price": "65.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-46",
+    "name": "Bún chay",
+    "price": "35.000đ",
+    "rarity": "HIẾM",
+    "category": "Chay · Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-47",
+    "name": "Cháo vịt",
+    "price": "55.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-48",
+    "name": "Cháo lòng",
+    "price": "40.000đ",
+    "rarity": "HIẾM",
+    "category": "Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-49",
+    "name": "Bánh hỏi heo quay",
+    "price": "50.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Bún, phở & mì",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-50",
+    "name": "Nem nướng",
+    "price": "55.000đ",
+    "rarity": "HIẾM",
+    "category": "Nướng & chiên",
+    "icon": "🥟",
+    "weight": 1
+  },
+  {
+    "id": "food-51",
+    "name": "Dimsum",
+    "price": "130.000đ",
+    "rarity": "HIẾM",
+    "category": "Salad & món nhẹ",
+    "icon": "🥟",
+    "weight": 1
+  },
+  {
+    "id": "food-52",
+    "name": "Mì hoành thánh",
+    "price": "60.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-53",
+    "name": "Mì Ý sốt cà chua & phô mai",
+    "price": "170.000đ",
+    "rarity": "HIẾM",
+    "category": "Pizza & pasta",
+    "icon": "🍝",
+    "weight": 1
+  },
+  {
+    "id": "food-54",
+    "name": "Miến xào",
+    "price": "55.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-55",
+    "name": "Xôi mặn",
+    "price": "35.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-56",
+    "name": "Bò kho bánh mì",
+    "price": "65.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Nướng & chiên",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-57",
+    "name": "Cháo gà",
+    "price": "45.000đ",
+    "rarity": "HIẾM",
+    "category": "Lẩu & cháo",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-58",
+    "name": "Nui xào bò",
+    "price": "50.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-59",
+    "name": "Mì Ý cá hồi",
+    "price": "230.000đ",
+    "rarity": "HIẾM",
+    "category": "Pizza & pasta",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-60",
+    "name": "Mì xá xíu",
+    "price": "65.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-61",
+    "name": "Cơm risotto",
+    "price": "260.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-62",
+    "name": "Cơm vịt quay",
+    "price": "75.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-63",
+    "name": "Mac & cheese",
+    "price": "150.000đ",
+    "rarity": "SỬ THI",
+    "category": "Pizza & pasta",
+    "icon": "🍝",
+    "weight": 1
+  },
+  {
+    "id": "food-64",
+    "name": "Cơm xá xíu",
+    "price": "55.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-65",
+    "name": "Mì Ý pesto",
+    "price": "170.000đ",
+    "rarity": "HIẾM",
+    "category": "Pizza & pasta",
+    "icon": "🍝",
+    "weight": 1
+  },
+  {
+    "id": "food-66",
+    "name": "Burrito",
+    "price": "150.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-67",
+    "name": "Bánh mì chảo",
+    "price": "45.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-68",
+    "name": "Fish & chips",
+    "price": "170.000đ",
+    "rarity": "HIẾM",
+    "category": "Nướng & chiên",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-69",
+    "name": "Bánh cuộn gà",
+    "price": "80.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bánh mì & cuốn",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-70",
+    "name": "Gà nướng kèm khoai tây",
+    "price": "140.000đ",
+    "rarity": "SỬ THI",
+    "category": "Nướng & chiên",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-71",
+    "name": "Taco",
+    "price": "150.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-72",
+    "name": "Burger gà & khoai tây",
+    "price": "80.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-73",
+    "name": "Quesadilla",
+    "price": "140.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-74",
+    "name": "Mì udon xào",
+    "price": "150.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-75",
+    "name": "Lẩu Thái một người",
+    "price": "130.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-76",
+    "name": "Cơm chiên kimchi",
+    "price": "65.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-77",
+    "name": "Cà ri Ấn Độ & naan",
+    "price": "220.000đ",
+    "rarity": "HIẾM",
+    "category": "Bánh mì & cuốn",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-78",
+    "name": "Gnocchi",
+    "price": "130.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Pizza & pasta",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-79",
+    "name": "Lẩu sukiyaki một người",
+    "price": "220.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-80",
+    "name": "Falafel kèm pita",
+    "price": "90.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Chay · Bánh mì & cuốn",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-81",
+    "name": "Bánh xèo Nhật",
+    "price": "90.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-82",
+    "name": "Cơm biryani",
+    "price": "190.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-83",
+    "name": "Bánh mì kebab",
+    "price": "35.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-84",
+    "name": "Sandwich",
+    "price": "80.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-85",
+    "name": "Cơm tấm",
+    "price": "70.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-86",
+    "name": "Phở bò",
+    "price": "70.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-87",
+    "name": "Bánh mì",
+    "price": "25.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-88",
+    "name": "Bún chả",
+    "price": "50.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-89",
+    "name": "Sushi cá hồi",
+    "price": "150.000đ",
+    "rarity": "HIẾM",
+    "category": "Salad & món nhẹ",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-90",
+    "name": "Pizza",
+    "price": "100.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Pizza & pasta",
+    "icon": "🍕",
+    "weight": 1
+  },
+  {
+    "id": "food-91",
+    "name": "Gà rán",
+    "price": "65.000đ",
+    "rarity": "SỬ THI",
+    "category": "Nướng & chiên",
+    "icon": "🍗",
+    "weight": 3
+  },
+  {
+    "id": "food-92",
+    "name": "Cơm chay",
+    "price": "35.000đ",
+    "rarity": "HIẾM",
+    "category": "Chay · Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-93",
+    "name": "Bibimbap",
+    "price": "65.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-94",
+    "name": "Cơm gà Hội An",
+    "price": "45.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-95",
+    "name": "Cơm cà ri Nhật",
+    "price": "90.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-96",
+    "name": "Tteokbokki",
+    "price": "40.000đ",
+    "rarity": "SỬ THI",
+    "category": "Salad & món nhẹ",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-97",
+    "name": "Ramen",
+    "price": "120.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-98",
+    "name": "Udon",
+    "price": "85.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-99",
+    "name": "Cơm gà xối mỡ",
+    "price": "60.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-100",
+    "name": "Gỏi cuốn",
+    "price": "35.000đ",
+    "rarity": "HIẾM",
+    "category": "Salad & món nhẹ",
+    "icon": "🥗",
+    "weight": 1
+  },
+  {
+    "id": "food-101",
+    "name": "Cháo sườn",
+    "price": "40.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-102",
+    "name": "Mì xào bò",
+    "price": "60.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Bún, phở & mì",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-103",
+    "name": "Bún cá",
+    "price": "55.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-104",
+    "name": "Gà phô mai Hàn Quốc",
+    "price": "120.000đ",
+    "rarity": "HIẾM",
+    "category": "Nướng & chiên",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-105",
+    "name": "Canh đậu hũ non kèm cơm",
+    "price": "70.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-106",
+    "name": "Mì vịt tiềm",
+    "price": "95.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-107",
+    "name": "Mì Tom Yum",
+    "price": "60.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-108",
+    "name": "Kimbap",
+    "price": "55.000đ",
+    "rarity": "HIẾM",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-109",
+    "name": "Pad Thai",
+    "price": "75.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-110",
+    "name": "Mì nấm chay",
+    "price": "40.000đ",
+    "rarity": "SỬ THI",
+    "category": "Chay · Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-111",
+    "name": "Cơm tempura",
+    "price": "130.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-112",
+    "name": "Burger bò",
+    "price": "65.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-113",
+    "name": "Lẩu nấm chay",
+    "price": "120.000đ",
+    "rarity": "HIẾM",
+    "category": "Chay · Lẩu & cháo",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-114",
+    "name": "Bò né",
+    "price": "75.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Nướng & chiên",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-115",
+    "name": "Cơm gà trứng Nhật",
+    "price": "100.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-116",
+    "name": "Mì Ý bò bằm",
+    "price": "80.000đ",
+    "rarity": "SỬ THI",
+    "category": "Pizza & pasta",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-117",
+    "name": "Gỏi cuốn chay",
+    "price": "35.000đ",
+    "rarity": "SỬ THI",
+    "category": "Chay · Salad & món nhẹ",
+    "icon": "🥗",
+    "weight": 1
+  },
+  {
+    "id": "food-118",
+    "name": "Cơm gà teriyaki",
+    "price": "85.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Cơm & xôi",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-119",
+    "name": "Cơm cà ri Thái",
+    "price": "110.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-120",
+    "name": "Cơm gà Hải Nam",
+    "price": "75.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-121",
+    "name": "Bánh mì chay",
+    "price": "25.000đ",
+    "rarity": "SỬ THI",
+    "category": "Chay · Bánh mì & cuốn",
+    "icon": "🥪",
+    "weight": 1
+  },
+  {
+    "id": "food-122",
+    "name": "Cơm heo chiên xù",
+    "price": "95.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-123",
+    "name": "Mì soba Nhật",
+    "price": "110.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-124",
+    "name": "Cơm niêu Singapore",
+    "price": "85.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-125",
+    "name": "Cơm chiên hải sản",
+    "price": "85.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-126",
+    "name": "Cơm cá saba nướng",
+    "price": "125.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍣",
+    "weight": 1
+  },
+  {
+    "id": "food-127",
+    "name": "Canh kimchi kèm cơm",
+    "price": "70.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Cơm & xôi",
+    "icon": "🍲",
+    "weight": 1
+  },
+  {
+    "id": "food-128",
+    "name": "Cơm bình dân",
+    "price": "40.000đ",
+    "rarity": "SỬ THI",
+    "category": "Cơm & xôi",
+    "icon": "🍱",
+    "weight": 1
+  },
+  {
+    "id": "food-129",
+    "name": "Cơm bò gyudon",
+    "price": "90.000đ",
+    "rarity": "THƯỜNG",
+    "category": "Cơm & xôi",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-130",
+    "name": "Mì lạnh Hàn Quốc",
+    "price": "95.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-131",
+    "name": "Pizza pepperoni",
+    "price": "140.000đ",
+    "rarity": "SỬ THI",
+    "category": "Pizza & pasta",
+    "icon": "🍕",
+    "weight": 1
+  },
+  {
+    "id": "food-132",
+    "name": "Mì tương đen",
+    "price": "60.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-133",
+    "name": "Bún riêu",
+    "price": "45.000đ",
+    "rarity": "HIẾM",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-134",
+    "name": "Burger bò phô mai & khoai tây",
+    "price": "120.000đ",
+    "rarity": "HIẾM",
+    "category": "Bánh mì & cuốn",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-135",
+    "name": "Mì cay Hàn Quốc",
+    "price": "75.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-136",
+    "name": "Bánh canh cua",
+    "price": "65.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-137",
+    "name": "Lasagna bò",
+    "price": "160.000đ",
+    "rarity": "HIẾM",
+    "category": "Pizza & pasta",
+    "icon": "🥩",
+    "weight": 1
+  },
+  {
+    "id": "food-138",
+    "name": "Mì Ý sốt kem bacon",
+    "price": "115.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Pizza & pasta",
+    "icon": "🍝",
+    "weight": 1
+  },
+  {
+    "id": "food-139",
+    "name": "Salad ức gà",
+    "price": "85.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Salad & món nhẹ",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-140",
+    "name": "Mì trộn Hàn Quốc",
+    "price": "60.000đ",
+    "rarity": "SỬ THI",
+    "category": "Bún, phở & mì",
+    "icon": "🍜",
+    "weight": 1
+  },
+  {
+    "id": "food-141",
+    "name": "Chole bhature",
+    "price": "165.000đ",
+    "rarity": "HIẾM",
+    "category": "Chay · Bánh mì & cuốn",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-142",
+    "name": "Masala dosa",
+    "price": "115.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Chay · Bánh mì & cuốn",
+    "icon": "🍽️",
+    "weight": 1
+  },
+  {
+    "id": "food-143",
+    "name": "Gà tandoori kèm naan",
+    "price": "220.000đ",
+    "rarity": "HUYỀN THOẠI",
+    "category": "Nướng & chiên",
+    "icon": "🍗",
+    "weight": 1
+  },
+  {
+    "id": "food-144",
+    "name": "Palak paneer kèm cơm",
+    "price": "200.000đ",
+    "rarity": "CỔ VẬT",
+    "category": "Chay · Cơm & xôi",
+    "icon": "🍽️",
+    "weight": 1
+  }
+]

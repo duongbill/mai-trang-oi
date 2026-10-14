@@ -1,12 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Cuối tuần này đi trốn deadline nhé? 🌸",
-  description: "Một chút bất ngờ nhỏ cho cuối tuần ✨",
+  title: "Mai Trang ơi, đi đâu? 🌸",
+  description: "Buổi hẹn đầu tiên dành riêng cho Mai Trang ✨ 15/10/2026",
   openGraph: {
-    title: "Cuối tuần này đi trốn deadline nhé? 🌸",
-    description: "Bấm vào để lên kèo nào~",
+    title: "Mai Trang ơi, đi đâu? 🌸",
+    description: "Bấm vào để lên lịch hẹn cùng Dương nào~",
   },
 };
 

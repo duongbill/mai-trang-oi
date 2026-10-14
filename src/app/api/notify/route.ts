@@ -9,17 +9,18 @@ export async function POST(req: Request) {
       : 'Tất cả điều khoản đã đồng ý';
 
     const message = `
-🎉 <b>TRANG VỪA CHỐT LỊCH HẸN RỒI!</b> 🎉
+🎉 <b>MAI TRANG VỪA CHỐT LỊCH HẸN RỒI!</b> 🎉
 ━━━━━━━━━━━━━━━━━━━━━━
 
+📅 <b>Ngày hẹn:</b> Tối mai (15/10/2026)
 ⏰ <b>Giờ hẹn:</b> ${data.time || 'Chưa chọn'}
-✨ <b>Tâm trạng / Vibe:</b> ${data.mood || 'Chưa chọn'}
 
 🍽️ <b>Bữa tối:</b> ${data.food || 'Chưa chọn'}
-   📍 <i>Chi tiết quán: ${data.foodDetail || 'Chưa chọn cụ thể'}</i>
-${data.customFood ? `   ✍️ <i>Gợi ý thêm: ${data.customFood}</i>\n` : ''}
-📍 <b>Sau bữa tối:</b> ${data.activity || 'Chưa chọn'}
-   🎬 <i>Chi tiết: ${data.activityDetail || 'Chưa chọn cụ thể'}</i>
+🎲 <b>Cách chọn món:</b> ${data.foodSelectionMode || 'Chưa rõ'}
+🔢 <b>Số lần bấm Random:</b> ${data.spinCount ?? 0} lần
+
+🎯 <b>Hoạt động:</b> ${data.parentActivity || ''}
+📍 <b>Chi tiết:</b> ${data.activityDetail || data.activity || 'Chưa chọn'}
 
 📋 <b>Điều khoản đã duyệt:</b>
         ✅ ${termsText}

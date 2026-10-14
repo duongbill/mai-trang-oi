@@ -1,92 +1,154 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
+import FOOD_CATALOG from '@/data/foodCatalog.json';
+
 // ─── DATA CHO BUỔI HẸN ĐẦU TIÊN (Sau 19:00) ──────────────────────────────────
-const TIME_OPTIONS = [
-  { id: '19h00', label: '19:00 - Chuẩn giờ tan ca thong thả', icon: '🕖' },
-  { id: '19h30', label: '19:30 - Tắm rửa lên đồ thật xinh rồi đón', icon: '🌙' },
-  { id: '20h00', label: '20:00 - Ăn muộn một chút cho mát mẻ', icon: '✨' },
-  { id: 'custom', label: 'Giờ khác (Trang tự chọn)', icon: '⏰' },
-];
+const TIME_SUGGESTIONS = ['19:00', '19:30', '20:00', '20:30'];
 
-const MOOD_OPTIONS = [
-  { id: 'chill', label: 'Nhẹ nhàng, thư giãn sau ngày làm việc', icon: '🍃' },
-  { id: 'quiet', label: 'Không gian ấm cúng để dễ nói chuyện', icon: '☕' },
-  { id: 'vibrant', label: 'Vui tươi, nhiều năng lượng cho thoải mái', icon: '🎡' },
-];
-
-interface OptionWithSub {
+// 1. THỰC ĐƠN 144 MÓN & TỈ LỆ GÀ RÁN x3
+interface FoodItem {
   id: string;
-  label: string;
+  name: string;
+  price: string;
+  rarity: string;
+  category: string;
   icon: string;
-  suggestions: string[];
+  weight: number;
 }
 
-const FOOD_OPTIONS: OptionWithSub[] = [
+const ALL_FOODS: FoodItem[] = FOOD_CATALOG as FoodItem[];
+
+
+
+// 2. HOẠT ĐỘNG CHÍNH (PARENT) & CHI TIẾT CON (CHILD SUB-OPTIONS)
+interface SubOption {
+  id: string;
+  title: string;
+  desc: string;
+  icon: string;
+}
+
+interface ParentActivity {
+  id: string;
+  name: string;
+  icon: string;
+  tagline: string;
+  vibe: string;
+  subOptions: SubOption[];
+}
+
+const PARENT_ACTIVITIES: ParentActivity[] = [
   {
-    id: 'bbq',
-    label: 'Lẩu / Nướng xèo xèo ấm cúng',
-    icon: '🍲',
-    suggestions: [
-      'Gợi ý 1: Quán Nướng A (Không gian chill, đồ tươi)',
-      'Gợi ý 2: Lẩu B (Nước lẩu thanh ngọt, ấm bụng)',
-      'Gợi ý 3: Quán C (Có bàn riêng tư, dễ nói chuyện)',
+    id: 'cafe',
+    name: 'Đi Cà phê trò chuyện',
+    icon: '☕',
+    tagline: 'Không gian ấm cúng, tâm sự nhẹ nhàng',
+    vibe: 'Chill chill & Lắng nghe',
+    subOptions: [
+      {
+        id: 'cafe-pho-co',
+        title: 'Cafe ban công Phố Cổ',
+        desc: 'Ngắm phố xá lên đèn (Loading T, Đinh Cafe)',
+        icon: '🏮',
+      },
+      {
+        id: 'cafe-ho-tay',
+        title: 'Cafe ven Hồ Tây thoáng mát',
+        desc: 'Đón gió đêm, ngắm cảnh (Khu Từ Hoa / Trúc Bạch)',
+        icon: '🌊',
+      },
+      {
+        id: 'cafe-cau-giay',
+        title: 'Cafe tone ấm Cầu Giấy',
+        desc: 'Không gian nhẹ nhàng, yên tĩnh gần nhà',
+        icon: '🏡',
+      },
     ],
   },
   {
-    id: 'asian',
-    label: 'Đồ Hàn / Nhật thanh nhẹ, tinh tế',
-    icon: '🍣',
-    suggestions: [
-      'Gợi ý 1: Quán Nhật Sushi & Sashimi A',
-      'Gợi ý 2: Quán Hàn Tokbokki & Cơm trộn B',
-      'Gợi ý 3: Mì Ramen ấm nóng buổi tối C',
+    id: 'movie',
+    name: 'Đi Xem phim rạp',
+    icon: '🎬',
+    tagline: 'Phim hay, bắp rang bơ & thư giãn',
+    vibe: 'Gần gũi & Cảm xúc',
+    subOptions: [
+      {
+        id: 'movie-romance',
+        title: 'Phim Tình cảm / Lãng mạn',
+        desc: 'Ngọt ngào, cảm xúc (đang chiếu rạp)',
+        icon: '💖',
+      },
+      {
+        id: 'movie-anime',
+        title: 'Phim Hoạt hình / Anime dễ thương',
+        desc: 'Hài hước, đáng yêu, nhẹ nhàng dễ xem',
+        icon: '🎨',
+      },
+      {
+        id: 'movie-action',
+        title: 'Phim Hành động / Gay cấn',
+        desc: 'Kịch tính, cuốn hút từng phút giây',
+        icon: '🍿',
+      },
+    ],
+  },
+  {
+    id: 'game',
+    name: 'Tô tượng & Chơi game',
+    icon: '🎨',
+    tagline: 'Cùng nhau tô tượng, chơi game vui vẻ',
+    vibe: 'Dễ thương & Tiếng cười',
+    subOptions: [
+      {
+        id: 'game-arcade',
+        title: 'Timezone / Dream Games',
+        desc: 'Đua xe đối kháng, ném bóng rổ tạo tiếng cười',
+        icon: '🕹️',
+      },
+      {
+        id: 'game-claw',
+        title: 'Gắp thú bông',
+        desc: 'Quyết tâm săn bằng được 1 em gấu đem về tặng Trang',
+        icon: '🧸',
+      },
+      {
+        id: 'game-paint',
+        title: 'Tô tượng, chơi game',
+        desc: 'Vừa tô tượng xinh xắn có kỷ niệm mang về, vừa chơi game giải trí',
+        icon: '🎨',
+      },
     ],
   },
   {
     id: 'street',
-    label: 'Ốc / Đồ ăn vặt / Nem nướng gần gũi',
-    icon: '🍢',
-    suggestions: [
-      'Gợi ý 1: Quán Ốc A (Nước chấm siêu đỉnh)',
-      'Gợi ý 2: Nem nướng Nha Trang B',
-      'Gợi ý 3: Phố ăn vặt C (Nhiều món vừa ăn vừa trò chuyện)',
-    ],
-  },
-];
-
-const ACTIVITY_OPTIONS: OptionWithSub[] = [
-  {
-    id: 'cafe',
-    label: 'Cafe rooftop ngắm phố đêm',
-    icon: '🌃',
-    suggestions: [
-      'Gợi ý 1: Cafe Ban Công A (View hồ lộng gió)',
-      'Gợi ý 2: Cafe Tone Ấm B (Nhạc jazz acoustic êm dịu)',
-      'Gợi ý 3: Quán Cafe C (Nhiều góc check-in xinh)',
-    ],
-  },
-  {
-    id: 'cinema',
-    label: 'Xem phim rạp suất tối',
-    icon: '🎬',
-    suggestions: [
-      'Gợi ý 1: Phim hài tình cảm lãng mạn nhẹ nhàng',
-      'Gợi ý 2: Phim hoạt hình Anime chữa lành',
-      'Gợi ý 3: Phim bom tấn hành động kịch tính',
-    ],
-  },
-  {
-    id: 'walk',
-    label: 'Đi dạo hóng gió, ăn kem buôn chuyện',
-    icon: '🍦',
-    suggestions: [
-      'Gợi ý 1: Dạo quanh hồ gió mát',
-      'Gợi ý 2: Ghé tiệm kem thủ công Gelato',
-      'Gợi ý 3: Đi bộ tuyến phố đêm yên tĩnh',
+    name: 'Lượn phố hóng gió',
+    icon: '🛵',
+    tagline: 'Mùa thu Hà Nội se lạnh, lượn xe hóng gió',
+    vibe: 'Lãng mạn & Thu Hà Nội',
+    subOptions: [
+      {
+        id: 'street-ho-tay',
+        title: 'Dạo một vòng Hồ Tây',
+        desc: 'Hít thở không khí mát mẻ, ăn kem dừa ngọt mát',
+        icon: '🌊',
+      },
+      {
+        id: 'street-hoang-dieu',
+        title: 'Lượn qua Hoàng Diệu & Phan Đình Phùng',
+        desc: 'Ngắm đường phố rợp bóng cây cổ thụ mùa thu cực thơ',
+        icon: '🍂',
+      },
+      {
+        id: 'street-bo-ho',
+        title: 'Dạo bộ Bờ Hồ & Nhà Thờ',
+        desc: 'Chụp ảnh kỷ niệm trước Nhà Thờ Lớn lung linh',
+        icon: '⛪',
+      },
     ],
   },
 ];
@@ -101,48 +163,45 @@ const TERMS_DEFAULT = [
 interface Selections {
   time: string;
   customTime: string;
-  mood: string;
   food: string;
-  foodDetail: string;
   customFood: string;
-  activity: string;
+  parentActivity: string;
   activityDetail: string;
+  customActivity: string;
   terms: string[];
+  spinCount: number;
+  isFoodFromSpin: boolean;
 }
 
 // ─── ANIMATION VARIANTS ──────────────────────────────────────────────────────
 const slideVariants = {
   enter: (dir: number) => ({
-    x: dir > 0 ? '100%' : '-100%',
+    x: dir > 0 ? 30 : -30,
     opacity: 0,
   }),
   center: { x: 0, opacity: 1 },
   exit: (dir: number) => ({
-    x: dir > 0 ? '-100%' : '100%',
+    x: dir > 0 ? -30 : 30,
     opacity: 0,
   }),
 };
 
-// ─── PROGRESS DOTS ───────────────────────────────────────────────────────────
-function ProgressDots({ current, total }: { current: number; total: number }) {
+// ─── THIN PROGRESS BAR ───────────────────────────────────────────────────────
+function ThinProgressBar({ step, total }: { step: number; total: number }) {
+  const percent = Math.min(100, Math.max(0, (step / total) * 100));
   return (
-    <div className="flex gap-2 justify-center mb-5">
-      {Array.from({ length: total }).map((_, i) => (
-        <motion.div
-          key={i}
-          animate={{
-            width: i === current ? 24 : 8,
-            backgroundColor: i <= current ? '#ec4899' : '#fce7f3',
-          }}
-          className="h-2 rounded-full"
-          transition={{ duration: 0.3 }}
-        />
-      ))}
+    <div className="w-full bg-pink-100/80 h-1.5 rounded-full overflow-hidden mb-2.5 shadow-2xs">
+      <motion.div
+        className="h-full bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500 rounded-full"
+        initial={{ width: 0 }}
+        animate={{ width: `${percent}%` }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+      />
     </div>
   );
 }
 
-// ─── STEP 0: LANDING (Buổi hẹn đầu tiên) ──────────────────────────────────────
+// ─── STEP 0: LANDING (MỞ ĐẦU) ────────────────────────────────────────────────
 function Step0Landing({ onNext }: { onNext: () => void }) {
   const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
   const [escaped, setEscaped] = useState(0);
@@ -166,23 +225,23 @@ function Step0Landing({ onNext }: { onNext: () => void }) {
 
       <div className="space-y-2">
         <h1 className="text-3xl font-extrabold text-pink-600">
-          Gửi Trang ✨
+          Mai Trang ơi, đi đâu? ✨
         </h1>
         <p className="text-gray-600 text-sm leading-relaxed max-w-xs mx-auto">
-          Sau giờ làm việc cuối tuần này, cùng Dương đi ăn tối và trò chuyện một chút nhé?
+          Tối mai (15/10) sau khi Dương đi làm về, cùng Dương đi ăn tối và trò chuyện một chút nhé?
         </p>
         <span className="inline-block px-3 py-1 bg-pink-100 text-pink-600 text-xs font-semibold rounded-full mt-1">
-          🌸 First Date Edition · Lịch sau 7h tối
+          🌸 Buổi Hẹn Đầu Tiên · Tối mai 15/10/2026
         </span>
       </div>
 
-      {escaped >= 3 && (
+      {escaped >= 1 && (
         <motion.p
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-xs text-pink-500 italic"
+          className="text-xs text-pink-500 font-medium italic"
         >
-          Đừng từ chối mà, Dương chuẩn bị xe cộ chu đáo rồi đó 🥺
+          Đừng từ chối mà, Dương chuẩn bị cho Mtrang gòi á 🥺
         </motion.p>
       )}
 
@@ -210,392 +269,647 @@ function Step0Landing({ onNext }: { onNext: () => void }) {
   );
 }
 
-// ─── STEP 1: TIME & MOOD ─────────────────────────────────────────────────────
-function Step1TimeMood({
+// ─── STEP 1: CHỌN MÓN ĂN (144 MÓN & QUAY GACHA x3 GÀ RÁN) ───────────────────
+function Step1Food({
   selections,
   onChange,
 }: {
   selections: Selections;
-  onChange: (key: keyof Selections, val: string) => void;
+  onChange: (key: keyof Selections, val: any) => void;
 }) {
-  return (
-    <div className="space-y-5">
-      <div>
-        <h2 className="text-base font-bold text-pink-600 mb-0.5">⏰ Giờ đón sau giờ làm</h2>
-        <p className="text-xs text-gray-400 mb-2.5">Khoảng thời gian Trang thấy thoải mái nhất (sau 7h tối)</p>
-        <div className="space-y-2">
-          {TIME_OPTIONS.map((opt) => {
-            const isSelected = selections.time === opt.id;
-            return (
-              <div key={opt.id} className="space-y-2">
-                <motion.button
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => onChange('time', opt.id)}
-                  className={`w-full text-left px-4 py-3 rounded-2xl border-2 transition-all flex items-center gap-3 cursor-pointer
-                    ${isSelected
-                      ? 'border-pink-400 bg-pink-50/80 shadow-sm'
-                      : 'border-gray-200 bg-white hover:border-pink-200'
-                    }`}
-                >
-                  <span className="text-2xl">{opt.icon}</span>
-                  <span className="text-xs font-medium text-gray-700 flex-1">{opt.label}</span>
-                  {isSelected && <span className="text-pink-500 font-bold">✓</span>}
-                </motion.button>
+  const ITEMS_PER_PAGE = 6;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Tất cả');
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [isSpinModalOpen, setIsSpinModalOpen] = useState(false);
+  const [displaySpinFood, setDisplaySpinFood] = useState<FoodItem>(ALL_FOODS[0]);
+  const [spinWinner, setSpinWinner] = useState<FoodItem | null>(null);
+  const [highlightedFood, setHighlightedFood] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-                {opt.id === 'custom' && isSelected && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="pl-2 pr-1 py-1.5 space-y-2.5"
-                  >
-                    {/* Chip chọn giờ nhanh */}
-                    <div className="space-y-1">
-                      <p className="text-[11px] font-semibold text-pink-500 uppercase tracking-wider">
-                        ✨ Khung giờ gợi ý (24h):
-                      </p>
-                      <div className="grid grid-cols-4 gap-1.5">
-                        {['19:15', '19:45', '20:15', '20:30'].map((quickTime) => {
-                          const isQuickActive = selections.customTime.startsWith(quickTime);
-                          return (
-                            <button
-                              key={quickTime}
-                              type="button"
-                              onClick={() => onChange('customTime', `${quickTime} - Đón Trang`)}
-                              className={`py-1.5 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
-                                isQuickActive
-                                  ? 'bg-pink-500 text-white border-pink-500 shadow-sm shadow-pink-200'
-                                  : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50'
-                              }`}
-                            >
-                              {quickTime}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-                    {/* Bộ chọn Giờ và Phút dạng Stepper Dial tăng giảm siêu cute */}
-                    <div className="bg-pink-50/70 p-3.5 rounded-2xl border border-pink-200 space-y-2.5">
-                      <div className="flex items-center justify-between text-xs text-pink-600 font-bold">
-                        <span>⏰ Giờ đón chính xác:</span>
-                        <span className="text-[10px] bg-pink-200/60 text-pink-700 px-2 py-0.5 rounded-full font-medium">
-                          Khung 19h - 23h
-                        </span>
-                      </div>
+  const mainCategories = [
+    'Tất cả',
+    'Cơm & xôi',
+    'Bún, phở & mì',
+    'Nướng & chiên',
+    'Lẩu & cháo',
+    'Pizza & pasta',
+    'Bánh mì & cuốn',
+    'Salad & món nhẹ',
+    'Chay',
+  ];
 
-                      {/* Hai khối số tăng giảm bóng bẩy */}
-                      <div className="flex items-center justify-center gap-3 py-1">
-                        {/* Khối Giờ */}
-                        {(() => {
-                          const currentH = parseInt(selections.customTime.match(/^(\d{2}):/)?.[1] || '19', 10);
-                          const currentM = selections.customTime.match(/:(\d{2})/)?.[1] || '15';
+  const filteredFoods = ALL_FOODS.filter((item) => {
+    const matchSearch =
+      search.trim() === '' ||
+      item.name.toLowerCase().includes(search.toLowerCase().trim()) ||
+      item.category.toLowerCase().includes(search.toLowerCase().trim());
+    const matchCategory =
+      selectedCategory === 'Tất cả' || item.category.includes(selectedCategory);
+    return matchSearch && matchCategory;
+  });
 
-                          const updateHour = (delta: number) => {
-                            let nextH = currentH + delta;
-                            if (nextH < 19) nextH = 23;
-                            if (nextH > 23) nextH = 19;
-                            onChange('customTime', `${String(nextH).padStart(2, '0')}:${currentM}`);
-                          };
-
-                          return (
-                            <div className="flex flex-col items-center">
-                              <motion.button
-                                whileTap={{ scale: 0.85 }}
-                                type="button"
-                                onClick={() => updateHour(1)}
-                                className="w-8 h-6 flex items-center justify-center text-pink-500 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
-                              >
-                                ▲
-                              </motion.button>
-                              <div className="w-16 h-12 bg-white rounded-2xl border-2 border-pink-300 shadow-sm flex items-center justify-center text-xl font-black text-gray-800">
-                                {String(currentH).padStart(2, '0')}
-                              </div>
-                              <span className="text-[10px] text-gray-400 mt-1 font-medium">Giờ</span>
-                              <motion.button
-                                whileTap={{ scale: 0.85 }}
-                                type="button"
-                                onClick={() => updateHour(-1)}
-                                className="w-8 h-6 flex items-center justify-center text-pink-500 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
-                              >
-                                ▼
-                              </motion.button>
-                            </div>
-                          );
-                        })()}
-
-                        <span className="text-pink-400 font-black text-2xl -mt-5 animate-pulse">:</span>
-
-                        {/* Khối Phút */}
-                        {(() => {
-                          const minutesArr = ['00', '15', '30', '45'];
-                          const currentH = selections.customTime.match(/^(\d{2}):/)?.[1] || '19';
-                          const currentM = selections.customTime.match(/:(\d{2})/)?.[1] || '15';
-                          const mIdx = Math.max(0, minutesArr.indexOf(currentM));
-
-                          const updateMin = (delta: number) => {
-                            let nextIdx = (mIdx + delta + minutesArr.length) % minutesArr.length;
-                            onChange('customTime', `${currentH}:${minutesArr[nextIdx]}`);
-                          };
-
-                          return (
-                            <div className="flex flex-col items-center">
-                              <motion.button
-                                whileTap={{ scale: 0.85 }}
-                                type="button"
-                                onClick={() => updateMin(1)}
-                                className="w-8 h-6 flex items-center justify-center text-pink-500 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
-                              >
-                                ▲
-                              </motion.button>
-                              <div className="w-16 h-12 bg-white rounded-2xl border-2 border-pink-300 shadow-sm flex items-center justify-center text-xl font-black text-gray-800">
-                                {currentM}
-                              </div>
-                              <span className="text-[10px] text-gray-400 mt-1 font-medium">Phút</span>
-                              <motion.button
-                                whileTap={{ scale: 0.85 }}
-                                type="button"
-                                onClick={() => updateMin(-1)}
-                                className="w-8 h-6 flex items-center justify-center text-pink-500 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
-                              >
-                                ▼
-                              </motion.button>
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </div>
-
-                    {/* Ô ghi chú thêm */}
-                    <input
-                      type="text"
-                      placeholder="Hoặc nhắn riêng cho Dương (vd: 19h15 đón ở sảnh...)"
-                      value={selections.customTime}
-                      onChange={(e) => onChange('customTime', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs text-gray-700 focus:outline-none focus:border-pink-400 bg-white placeholder:text-gray-400 shadow-xs"
-                    />
-                  </motion.div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-base font-bold text-pink-600 mb-0.5">✨ Vibe buổi hẹn đầu tiên</h2>
-        <p className="text-xs text-gray-400 mb-2.5">Trang muốn không khí thế nào?</p>
-        <div className="space-y-2">
-          {MOOD_OPTIONS.map((opt) => {
-            const isSelected = selections.mood === opt.id;
-            return (
-              <motion.button
-                key={opt.id}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => onChange('mood', opt.id)}
-                className={`w-full text-left px-4 py-3 rounded-2xl border-2 transition-all flex items-center gap-3 cursor-pointer
-                  ${isSelected
-                    ? 'border-pink-400 bg-pink-50/80 shadow-sm'
-                    : 'border-gray-200 bg-white hover:border-pink-200'
-                  }`}
-              >
-                <span className="text-2xl">{opt.icon}</span>
-                <span className="text-xs font-medium text-gray-700 flex-1">{opt.label}</span>
-                {isSelected && <span className="text-pink-500 font-bold">✓</span>}
-              </motion.button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+  const totalPages = Math.max(1, Math.ceil(filteredFoods.length / ITEMS_PER_PAGE));
+  const currentFoods = filteredFoods.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
-}
 
-// ─── STEP 2: FOOD & ACTIVITY (CÓ GỢI Ý ĐỊA ĐIỂM) ──────────────────────────────
-function Step2FoodActivity({
-  selections,
-  onChange,
-}: {
-  selections: Selections;
-  onChange: (key: keyof Selections, val: string) => void;
-}) {
-  const selectedFoodItem = FOOD_OPTIONS.find((f) => f.id === selections.food);
-  const selectedActivityItem = ACTIVITY_OPTIONS.find((a) => a.id === selections.activity);
+  const spinRandomFood = () => {
+    if (isSpinning) return;
+    setIsSpinning(true);
+    setSpinWinner(null);
+    setIsSpinModalOpen(true);
+    onChange('spinCount', selections.spinCount + 1);
 
-  const randomize = () => {
-    const food = FOOD_OPTIONS[Math.floor(Math.random() * FOOD_OPTIONS.length)];
-    const act = ACTIVITY_OPTIONS[Math.floor(Math.random() * ACTIVITY_OPTIONS.length)];
-    onChange('food', food.id);
-    onChange('foodDetail', food.suggestions[0]);
-    onChange('activity', act.id);
-    onChange('activityDetail', act.suggestions[0]);
+    // Xây dựng danh sách theo trọng số (Gà rán xuất hiện x3 lần ngầm!)
+    const weightedPool: FoodItem[] = [];
+    ALL_FOODS.forEach((item) => {
+      for (let i = 0; i < item.weight; i++) {
+        weightedPool.push(item);
+      }
+    });
+
+    const winner = weightedPool[Math.floor(Math.random() * weightedPool.length)];
+
+    // Nhịp quay: 16 nhịp nhanh (60ms) rồi 7 nhịp giảm tốc dần tạo hiệu ứng hồi hộp như máy quay slot
+    const delays = [
+      60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+      90, 130, 180, 240, 320, 420, 560
+    ];
+
+    let stepIndex = 0;
+    const runTick = () => {
+      if (stepIndex < delays.length) {
+        const randomDish = ALL_FOODS[Math.floor(Math.random() * ALL_FOODS.length)];
+        setDisplaySpinFood(randomDish);
+        const nextDelay = delays[stepIndex];
+        stepIndex++;
+        setTimeout(runTick, nextDelay);
+      } else {
+        // Dừng chính xác ở món thắng cuộc!
+        setDisplaySpinFood(winner);
+        setSpinWinner(winner);
+        setIsSpinning(false);
+
+        confetti({
+          particleCount: 75,
+          spread: 70,
+          origin: { y: 0.5 },
+          colors: ['#ec4899', '#f59e0b', '#8b5cf6', '#3b82f6'],
+        });
+      }
+    };
+
+    runTick();
+  };
+
+  const handleConfirmSpinWinner = (winner: FoodItem) => {
+    onChange('food', winner.name);
+    onChange('customFood', '');
+    onChange('isFoodFromSpin', true);
+    setIsSpinModalOpen(false);
+
+    // Tự chuyển sang tab chứa món đó nếu đang ở tab khác
+    let activeCat = selectedCategory;
+    if (selectedCategory !== 'Tất cả' && !winner.category.includes(selectedCategory)) {
+      setSelectedCategory('Tất cả');
+      activeCat = 'Tất cả';
+    }
+
+    // Tính toán trang chứa món này và chuyển tới trang đó ngay lập tức
+    const pool = ALL_FOODS.filter((item) => {
+      return activeCat === 'Tất cả' || item.category.includes(activeCat);
+    });
+    const winnerIdx = pool.findIndex((f) => f.id === winner.id);
+    if (winnerIdx !== -1) {
+      const targetPage = Math.floor(winnerIdx / ITEMS_PER_PAGE) + 1;
+      setCurrentPage(targetPage);
+    }
+
+    setHighlightedFood(winner.name);
+    setTimeout(() => {
+      setHighlightedFood(null);
+    }, 2800);
   };
 
   return (
-    <div className="space-y-6 max-h-[68vh] overflow-y-auto pr-1">
-      {/* 1. Món ăn */}
-      <div>
-        <h2 className="text-base font-bold text-pink-600 mb-0.5">🍽️ Ăn tối món gì ta?</h2>
-        <p className="text-xs text-gray-400 mb-2.5">Chọn loại món rồi chọn tiếp gợi ý bên dưới nha</p>
-        <div className="space-y-2">
-          {FOOD_OPTIONS.map((opt) => {
-            const isSelected = selections.food === opt.id;
-            return (
-              <div key={opt.id} className="space-y-2">
-                <motion.button
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    onChange('food', opt.id);
-                    if (!opt.suggestions.includes(selections.foodDetail)) {
-                      onChange('foodDetail', opt.suggestions[0]);
-                    }
-                  }}
-                  className={`w-full text-left px-4 py-3 rounded-2xl border-2 transition-all flex items-center gap-3 cursor-pointer
-                    ${isSelected
-                      ? 'border-pink-400 bg-pink-50 shadow-sm'
-                      : 'border-gray-200 bg-white hover:border-pink-200'
-                    }`}
-                >
-                  <span className="text-2xl">{opt.icon}</span>
-                  <span className="text-xs font-semibold text-gray-700 flex-1">{opt.label}</span>
-                  {isSelected && <span className="text-pink-500 font-bold">✓</span>}
-                </motion.button>
-
-                {/* Gợi ý quán a, b, c khi chọn */}
-                <AnimatePresence>
-                  {isSelected && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="pl-4 pr-1 py-1 space-y-1.5"
-                    >
-                      <p className="text-[11px] font-semibold text-pink-500 uppercase tracking-wider">
-                        📍 Chọn quán gợi ý:
-                      </p>
-                      {opt.suggestions.map((sug) => {
-                        const isSugSelected = selections.foodDetail === sug;
-                        return (
-                          <button
-                            key={sug}
-                            type="button"
-                            onClick={() => onChange('foodDetail', sug)}
-                            className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all border flex items-center gap-2 cursor-pointer
-                              ${isSugSelected
-                                ? 'bg-pink-100 border-pink-400 font-medium text-pink-700 shadow-xs'
-                                : 'bg-white border-gray-200 text-gray-600 hover:bg-pink-50/50'
-                              }`}
-                          >
-                            <span className="text-xs">{isSugSelected ? '💖' : '👉'}</span>
-                            <span className="flex-1">{sug}</span>
-                          </button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+    <div className="space-y-3 pb-2 w-full">
+      {/* Tiêu đề & Nút quay ngẫu nhiên phụ nhỏ gọn */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-0.5">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-sm sm:text-base font-extrabold text-pink-600 flex items-center gap-1.5 truncate">
+            <span>🍜</span> Chiếc bụng đói muốn ăn gì?
+          </h2>
+          <p className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">
+            144 món ngon Hà Nội đã sẵn sàng cho Trang ✨
+          </p>
         </div>
 
-        {/* Ô nhập món khác */}
-        <input
-          type="text"
-          placeholder="Hoặc Trang đang thèm một quán nào khác? ✍️"
-          value={selections.customFood}
-          onChange={(e) => onChange('customFood', e.target.value)}
-          className="mt-3 w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs text-gray-700 focus:outline-none focus:border-pink-400 bg-white placeholder:text-gray-400"
-        />
+        {/* Nút quay ngẫu nhiên phụ (Secondary Button) gọn gàng */}
+        <motion.button
+          whileTap={{ scale: 0.94 }}
+          whileHover={{ scale: 1.03 }}
+          type="button"
+          onClick={spinRandomFood}
+          disabled={isSpinning}
+          className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-pink-600 bg-pink-50 hover:bg-pink-100 border border-pink-200 shadow-2xs transition-all cursor-pointer disabled:opacity-60 shrink-0"
+          title="Quay ngẫu nhiên món ngon"
+        >
+          <span className="text-sm">🎲</span>
+          <span>Quay ngẫu nhiên</span>
+        </motion.button>
       </div>
 
-      {/* 2. Đi đâu tiếp theo */}
-      <div>
-        <h2 className="text-base font-bold text-pink-600 mb-0.5">📍 Ăn xong rồi mình đi đâu?</h2>
-        <p className="text-xs text-gray-400 mb-2.5">Một chút hoạt động nhẹ nhàng sau bữa tối</p>
-        <div className="space-y-2">
-          {ACTIVITY_OPTIONS.map((opt) => {
-            const isSelected = selections.activity === opt.id;
-            return (
-              <div key={opt.id} className="space-y-2">
-                <motion.button
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    onChange('activity', opt.id);
-                    if (!opt.suggestions.includes(selections.activityDetail)) {
-                      onChange('activityDetail', opt.suggestions[0]);
-                    }
-                  }}
-                  className={`w-full text-left px-4 py-3 rounded-2xl border-2 transition-all flex items-center gap-3 cursor-pointer
-                    ${isSelected
-                      ? 'border-pink-400 bg-pink-50 shadow-sm'
-                      : 'border-gray-200 bg-white hover:border-pink-200'
-                    }`}
-                >
-                  <span className="text-2xl">{opt.icon}</span>
-                  <span className="text-xs font-semibold text-gray-700 flex-1">{opt.label}</span>
-                  {isSelected && <span className="text-pink-500 font-bold">✓</span>}
-                </motion.button>
+      {/* Ô NHẬP MÓN RIÊNG (ĐƯA LÊN TRÊN ĐẦU CHO TIỆN) */}
+      <div className="bg-gradient-to-r from-pink-50/90 via-rose-50/50 to-pink-50/90 p-2.5 rounded-2xl border border-pink-200/90 shadow-2xs space-y-1.5">
+        <div className="flex items-center justify-between">
+          <label className="text-[11px] font-bold text-pink-700 flex items-center gap-1.5">
+            <span>✍️</span> Trang thèm món khác? Nhập tại đây nhé:
+          </label>
+          {selections.customFood && (
+            <button
+              type="button"
+              onClick={() => onChange('customFood', '')}
+              className="text-[10px] text-pink-600 hover:text-pink-800 font-bold cursor-pointer"
+            >
+              Xóa món riêng ✕
+            </button>
+          )}
+        </div>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+            🍽️
+          </span>
+          <input
+            type="text"
+            placeholder="Ví dụ: Anh 🙈"
+            value={selections.customFood}
+            onChange={(e) => {
+              onChange('customFood', e.target.value);
+              onChange('isFoodFromSpin', false);
+            }}
+            className="w-full pl-8 pr-3 py-2 rounded-xl border border-pink-200 text-xs text-gray-800 bg-white placeholder:text-gray-400 focus:outline-none focus:border-pink-400 shadow-2xs font-medium"
+          />
+        </div>
+        {selections.customFood && (
+          <p className="text-[10px] text-pink-600 font-bold flex items-center gap-1 pl-1">
+            <span>✓</span> Đang chọn món riêng: &ldquo;{selections.customFood}&rdquo;
+          </p>
+        )}
+      </div>
 
-                {/* Gợi ý phim / cafe a, b, c khi chọn */}
-                <AnimatePresence>
-                  {isSelected && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="pl-4 pr-1 py-1 space-y-1.5"
-                    >
-                      <p className="text-[11px] font-semibold text-pink-500 uppercase tracking-wider">
-                        📍 Chọn gợi ý chi tiết:
-                      </p>
-                      {opt.suggestions.map((sug) => {
-                        const isSugSelected = selections.activityDetail === sug;
-                        return (
-                          <button
-                            key={sug}
-                            type="button"
-                            onClick={() => onChange('activityDetail', sug)}
-                            className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all border flex items-center gap-2 cursor-pointer
-                              ${isSugSelected
-                                ? 'bg-pink-100 border-pink-400 font-medium text-pink-700 shadow-xs'
-                                : 'bg-white border-gray-200 text-gray-600 hover:bg-pink-50/50'
-                              }`}
-                          >
-                            <span className="text-xs">{isSugSelected ? '💖' : '👉'}</span>
-                            <span className="flex-1">{sug}</span>
-                          </button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+      {/* Thanh tìm kiếm & Tabs danh mục */}
+      <div className="space-y-2 pt-0.5">
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+            🔍
+          </span>
+          <input
+            type="text"
+            placeholder="Tìm món trong thực đơn 144 món..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full pl-8 pr-8 py-2 rounded-xl border border-pink-200 text-xs text-gray-800 bg-white placeholder:text-gray-400 focus:outline-none focus:border-pink-400 shadow-2xs"
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setCurrentPage(1);
+              }}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-600 cursor-pointer"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Danh mục lọc nhanh */}
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+          {mainCategories.map((cat) => {
+            const isActive = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setCurrentPage(1);
+                }}
+                className={`px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer border ${
+                  isActive
+                    ? 'bg-pink-500 text-white border-pink-500 shadow-2xs'
+                    : 'bg-white text-gray-600 border-pink-100 hover:bg-pink-50'
+                }`}
+              >
+                {cat}
+              </button>
             );
           })}
         </div>
       </div>
 
-      {/* Nút random */}
-      <motion.button
-        whileTap={{ scale: 0.95 }}
-        onClick={randomize}
-        className="w-full py-2.5 rounded-xl border border-dashed border-pink-400 text-pink-500 text-xs font-medium cursor-pointer bg-pink-50/60 hover:bg-pink-100/60"
-      >
-        🎲 Khó chọn quá? Bấm đây để Dương chọn ngẫu nhiên hộ!
-      </motion.button>
+      {/* Danh sách món ăn - Được phân trang 6 món / trang (Gọn gàng, không bị kéo dài) */}
+      <div className="space-y-1.5 pt-1">
+        {currentFoods.length > 0 ? (
+          currentFoods.map((item) => {
+            const isSelected = selections.food === item.name && !selections.customFood;
+            const isHighlighted = highlightedFood === item.name;
+            return (
+              <button
+                key={item.id}
+                id={`food-item-${item.id}`}
+                type="button"
+                onClick={() => {
+                  onChange('food', item.name);
+                  onChange('customFood', '');
+                  onChange('isFoodFromSpin', false);
+                }}
+                className={`w-full text-left p-2.5 rounded-2xl transition-all border-2 flex items-center gap-2.5 cursor-pointer ${
+                  isSelected
+                    ? 'bg-pink-50/95 border-pink-500 ring-2 ring-pink-400/40 shadow-xs'
+                    : isHighlighted
+                    ? 'bg-pink-100/70 border-pink-400 ring-2 ring-pink-400 animate-pulse'
+                    : 'bg-white border-pink-100 hover:border-pink-300 hover:bg-pink-50/40'
+                }`}
+              >
+                <span className="text-xl shrink-0">{item.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <span
+                    className={`text-xs leading-snug block ${
+                      isSelected ? 'font-extrabold text-pink-700' : 'font-medium text-gray-800'
+                    }`}
+                  >
+                    {item.name}
+                  </span>
+                  <span className="text-[10px] text-gray-400 block truncate mt-0.5">
+                    {item.category}
+                  </span>
+                </div>
+                <div
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 transition-all ${
+                    isSelected
+                      ? 'bg-pink-500 text-white font-bold ring-2 ring-pink-300 shadow-2xs'
+                      : 'border-2 border-gray-300 bg-white'
+                  }`}
+                >
+                  {isSelected ? '✓' : ''}
+                </div>
+              </button>
+            );
+          })
+        ) : (
+          <div className="text-center py-6 text-xs text-gray-400 bg-pink-50/20 rounded-2xl border border-dashed border-pink-200">
+            Không tìm thấy món &quot;{search}&quot;, Trang thử từ khóa khác hoặc nhập món riêng ở ô phía trên nhé!
+          </div>
+        )}
+      </div>
+
+      {/* Bộ điều khiển phân trang */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-1.5 px-0.5">
+          <button
+            type="button"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 disabled:opacity-30 disabled:cursor-not-allowed text-pink-600 text-xs font-bold border border-pink-200 shadow-2xs transition-all cursor-pointer"
+          >
+            <span>‹</span> Trang trước
+          </button>
+
+          <div className="text-[11px] text-gray-500 font-semibold text-center">
+            Trang <strong className="text-pink-600">{currentPage}</strong> / {totalPages}
+            <span className="text-[10px] text-gray-400 ml-1">({filteredFoods.length} món)</span>
+          </div>
+
+          <button
+            type="button"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 disabled:opacity-30 disabled:cursor-not-allowed text-pink-600 text-xs font-bold border border-pink-200 shadow-2xs transition-all cursor-pointer"
+          >
+            Trang sau <span>›</span>
+          </button>
+        </div>
+      )}
+
+      {/* Popup / Modal quay ngẫu nhiên vui nhộn được portal ra document.body để cố định chính giữa màn hình */}
+      {mounted && typeof document !== 'undefined'
+        ? createPortal(
+            <AnimatePresence>
+              {isSpinModalOpen && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                  <motion.div
+                    initial={{ scale: 0.85, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0.85, opacity: 0, y: 20 }}
+                    className="bg-white rounded-3xl p-5 w-full max-w-xs shadow-2xl border-2 border-pink-300 text-center space-y-3.5 relative overflow-hidden"
+                  >
+                    <div className="flex items-center justify-between pb-2 border-b border-pink-100">
+                      <span className="text-xs font-bold text-pink-600 flex items-center gap-1.5">
+                        <span className="text-base">🎰</span> Vòng Quay Ẩm Thực
+                      </span>
+                      <button
+                        type="button"
+                        disabled={isSpinning}
+                        onClick={() => setIsSpinModalOpen(false)}
+                        className="text-gray-400 hover:text-gray-600 text-sm font-bold cursor-pointer disabled:opacity-30"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    {/* Ô hiển thị món đang quay */}
+                    <div className="py-4 px-3 bg-gradient-to-b from-pink-50 to-rose-50/50 rounded-2xl border-2 border-pink-200 flex flex-col items-center justify-center min-h-[120px] relative overflow-hidden shadow-inner">
+                      {isSpinning && (
+                        <div className="absolute top-1.5 right-2 px-2 py-0.5 rounded-full bg-pink-500 text-white text-[9px] font-bold animate-pulse">
+                          Đang quay...
+                        </div>
+                      )}
+                      <motion.span
+                        key={displaySpinFood.name + (isSpinning ? '-spin' : '-win')}
+                        initial={isSpinning ? { y: -15, opacity: 0.6 } : { scale: 0.8, opacity: 0 }}
+                        animate={isSpinning ? { y: 0, opacity: 1 } : { scale: [1, 1.25, 1], opacity: 1 }}
+                        transition={{ duration: isSpinning ? 0.05 : 0.35 }}
+                        className="text-5xl mb-1.5 block select-none"
+                      >
+                        {displaySpinFood.icon}
+                      </motion.span>
+                      <motion.p
+                        key={displaySpinFood.name}
+                        className="text-sm font-black text-gray-800 line-clamp-1"
+                      >
+                        {displaySpinFood.name}
+                      </motion.p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">{displaySpinFood.category}</p>
+                    </div>
+
+                    {spinWinner ? (
+                      <div className="space-y-2.5">
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="p-3 rounded-xl bg-pink-100/90 border-2 border-pink-300 text-xs font-bold text-pink-700 leading-relaxed shadow-xs"
+                        >
+                          {spinWinner.name.includes('Gà rán')
+                            ? '🍗 Gà rán giòn rụm! Vũ trụ mách bảo tối mai ăn món này là chuẩn nhất rồi 😋'
+                            : `🎉 Vũ trụ đã chọn: ${spinWinner.name} ✨`}
+                        </motion.div>
+
+                        <div className="flex gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => handleConfirmSpinWinner(spinWinner)}
+                            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white font-bold text-xs shadow-md shadow-pink-200 cursor-pointer active:scale-97 transition-all"
+                          >
+                            Chốt món này ✨
+                          </button>
+                          <button
+                            type="button"
+                            onClick={spinRandomFood}
+                            className="py-2.5 px-3 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-600 font-bold text-xs cursor-pointer active:scale-97 transition-all"
+                          >
+                            Quay lại 🎲
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="py-1">
+                        <p className="text-xs font-bold text-pink-500 flex items-center justify-center gap-1.5 animate-pulse">
+                          <span>🎲</span> Đang tìm món ngon cho Trang...
+                        </p>
+                        <div className="w-full bg-pink-100 h-1.5 rounded-full overflow-hidden mt-2.5">
+                          <motion.div
+                            className="bg-gradient-to-r from-pink-500 via-rose-400 to-amber-400 h-full rounded-full"
+                            initial={{ width: '0%' }}
+                            animate={{ width: '100%' }}
+                            transition={{ duration: 2.7, ease: 'linear' }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>,
+            document.body
+          )
+        : null}
     </div>
   );
 }
 
-// ─── STEP 3: CHECKLIST ĐIỀU KHOẢN ───────────────────────────────────────────
-function Step3Checklist({
+// ─── STEP 2: CHỌN HOẠT ĐỘNG CHÍNH (PARENT ACTIVITY) ─────────────────────────
+function Step2ActivityParent({
   selections,
   onChange,
 }: {
   selections: Selections;
-  onChange: (key: keyof Selections, val: string[]) => void;
+  onChange: (key: keyof Selections, val: string) => void;
 }) {
-  const toggle = (term: string) => {
+  const handleSelectParent = (activity: ParentActivity) => {
+    onChange('parentActivity', activity.id);
+    if (!activity.subOptions.some((s) => s.title === selections.activityDetail)) {
+      onChange('activityDetail', activity.subOptions[0].title);
+    }
+  };
+
+  return (
+    <div className="space-y-4 pb-2">
+      <div>
+        <h2 className="text-base font-bold text-pink-600 mb-0.5">🎯 Tiếp theo mình làm gì nhỉ?</h2>
+        <p className="text-xs text-gray-500 mb-3">
+          Ăn no nê rồi thì mình đi đâu tiếp? Trang chọn 1 hoạt động chính nhé ✨
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2.5">
+        {PARENT_ACTIVITIES.map((act) => {
+          const isSelected = selections.parentActivity === act.id;
+          return (
+            <motion.button
+              key={act.id}
+              whileTap={{ scale: 0.97 }}
+              type="button"
+              onClick={() => handleSelectParent(act)}
+              className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between min-h-[120px] relative ${
+                isSelected
+                  ? 'border-pink-500 bg-pink-50/90 shadow-xs'
+                  : 'border-pink-100 bg-white hover:border-pink-200 hover:bg-pink-50/30'
+              }`}
+            >
+              <div className="flex items-start justify-between">
+                <span className="text-3xl">{act.icon}</span>
+                <div
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
+                    isSelected
+                      ? 'bg-pink-500 text-white shadow-2xs'
+                      : 'border-2 border-gray-200 text-transparent'
+                  }`}
+                >
+                  ✓
+                </div>
+              </div>
+              <div>
+                <p
+                  className={`text-xs font-bold leading-tight ${
+                    isSelected ? 'text-pink-700' : 'text-gray-800'
+                  }`}
+                >
+                  {act.name}
+                </p>
+                <p className="text-[10px] text-gray-500 mt-1 line-clamp-1">{act.vibe}</p>
+              </div>
+            </motion.button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── STEP 3: CHI TIẾT CON TƯƠNG ỨNG (CHILD SUB-OPTIONS) ──────────────────────
+function Step3ActivityDetail({
+  selections,
+  onChange,
+  onBackToParent,
+}: {
+  selections: Selections;
+  onChange: (key: keyof Selections, val: string) => void;
+  onBackToParent: () => void;
+}) {
+  const currentParent =
+    PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity) || PARENT_ACTIVITIES[0];
+
+  return (
+    <div className="space-y-3.5 pb-2">
+      <div>
+        <h2 className="text-base font-bold text-pink-600 mb-0.5">✨ Chi tiết thế này nhé!</h2>
+        <p className="text-xs text-gray-500 mb-2.5">
+          Chọn chi tiết cụ thể cho buổi hẹn theo đúng gu của Trang nè 💕
+        </p>
+
+        {/* Thanh tóm tắt hoạt động đã chọn ở Bước 2 */}
+        <div className="bg-pink-50/90 px-3.5 py-2.5 rounded-2xl border border-pink-200 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">{currentParent.icon}</span>
+            <div>
+              <p className="text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
+                Hoạt động đã chọn:
+              </p>
+              <p className="text-xs font-bold text-pink-700">{currentParent.name}</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onBackToParent}
+            className="text-[11px] font-semibold text-pink-600 hover:text-pink-700 bg-white hover:bg-pink-100/70 px-2.5 py-1 rounded-xl border border-pink-200 transition-all cursor-pointer shadow-2xs"
+          >
+            Đổi hoạt động ↺
+          </button>
+        </div>
+      </div>
+
+      {/* Danh sách các Option con tương ứng */}
+      <div className="space-y-2">
+        {currentParent.subOptions.map((sub, idx) => {
+          const isSelected = selections.activityDetail === sub.title && !selections.customActivity;
+          return (
+            <motion.button
+              key={sub.id}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={() => {
+                onChange('activityDetail', sub.title);
+                onChange('customActivity', '');
+              }}
+              className={`w-full text-left p-3 rounded-2xl border-2 transition-all flex items-start gap-3 cursor-pointer ${
+                isSelected
+                  ? 'border-pink-500 bg-pink-50/90 shadow-xs'
+                  : 'border-pink-100 bg-white hover:border-pink-200 hover:bg-pink-50/30'
+              }`}
+            >
+              <div className="w-9 h-9 rounded-xl bg-pink-100/70 flex items-center justify-center text-lg shrink-0 mt-0.5">
+                {sub.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] bg-pink-100 text-pink-600 font-bold px-1.5 py-0.2 rounded-md">
+                    Gợi ý {idx + 1}
+                  </span>
+                  <span
+                    className={`text-xs font-bold ${isSelected ? 'text-pink-700' : 'text-gray-800'}`}
+                  >
+                    {sub.title}
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">{sub.desc}</p>
+              </div>
+              <div
+                className={`w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-1 font-bold ${
+                  isSelected
+                    ? 'bg-pink-500 text-white shadow-2xs'
+                    : 'border-2 border-gray-200 text-transparent'
+                }`}
+              >
+                ✓
+              </div>
+            </motion.button>
+          );
+        })}
+
+        {/* Ô nhập chi tiết riêng */}
+        <div className="pt-1.5">
+          <label className="text-[11px] font-bold text-gray-600 flex items-center gap-1 mb-1">
+            <span>✍️</span> Hoặc ý tưởng riêng của Trang:
+          </label>
+          <input
+            type="text"
+            placeholder="Trang muốn đi đâu hay làm gì khác cứ gõ vào đây nhé..."
+            value={selections.customActivity}
+            onChange={(e) => onChange('customActivity', e.target.value)}
+            className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 text-xs text-gray-800 bg-white placeholder:text-gray-400 focus:outline-none focus:border-pink-400 shadow-2xs"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── STEP 4: ĐIỀU KHOẢN VUI VẺ & XUẤT VÉ HẸN HÒ ─────────────────────────────
+function Step4Ticket({
+  selections,
+  onChange,
+  onSubmit,
+  submitting,
+  done,
+}: {
+  selections: Selections;
+  onChange: (key: keyof Selections, val: string | string[]) => void;
+  onSubmit: () => void;
+  submitting: boolean;
+  done: boolean;
+}) {
+  const currentParent =
+    PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity) || PARENT_ACTIVITIES[0];
+  const finalFoodLabel = selections.customFood
+    ? `Món riêng Trang chọn: ${selections.customFood}`
+    : selections.food;
+  const finalActivityLabel = selections.customActivity
+    ? `${currentParent.name} ➜ ${selections.customActivity}`
+    : `${currentParent.name} ➜ ${selections.activityDetail}`;
+
+  const toggleTerm = (term: string) => {
     const current = selections.terms;
     if (current.includes(term)) {
       onChange('terms', current.filter((t) => t !== term));
@@ -605,80 +919,184 @@ function Step3Checklist({
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h2 className="text-base font-bold text-pink-600 mb-0.5">📋 Điều khoản buổi hẹn đầu</h2>
-        <p className="text-xs text-gray-400 mb-3">
-          (Đã bật sẵn, Trang yên tâm là chỉ cần xách túi đi chơi thôi nha 😄)
-        </p>
-        <div className="space-y-2.5">
-          {TERMS_DEFAULT.map((term) => (
-            <motion.button
-              key={term}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => toggle(term)}
-              className={`w-full text-left px-4 py-3 rounded-2xl border-2 transition-all flex items-start gap-3 cursor-pointer
-                ${selections.terms.includes(term)
-                  ? 'border-pink-400 bg-pink-50'
-                  : 'border-gray-200 bg-white opacity-60'
+    <div className="space-y-4 pb-2">
+      <h2 className="text-base font-bold text-pink-600 text-center">🎫 Tấm Vé Buổi Hẹn Đầu Tiên</h2>
+
+      {/* Phần chọn giờ đón & điểm đón */}
+      <div className="bg-gradient-to-b from-pink-50/90 to-rose-50/50 p-3.5 rounded-2xl border-2 border-pink-200 shadow-xs space-y-3">
+        <div className="flex items-center justify-between text-xs text-pink-600 font-bold px-1">
+          <span>⏰ Giờ đón chính xác (tối mai 15/10):</span>
+          <span className="text-[11px] bg-pink-200/70 text-pink-700 px-2 py-0.5 rounded-full font-semibold">
+            18h - 23h
+          </span>
+        </div>
+
+        {/* Stepper Dial tăng giảm trực quan */}
+        <div className="flex items-center justify-center gap-3 py-0.5">
+          {/* Khối Giờ */}
+          {(() => {
+            const currentH = parseInt(selections.time.match(/^(\d{2}):/)?.[1] || '19', 10);
+            const currentM = selections.time.match(/:(\d{2})/)?.[1] || '30';
+
+            const updateHour = (delta: number) => {
+              let nextH = currentH + delta;
+              if (nextH < 18) nextH = 23;
+              if (nextH > 23) nextH = 18;
+              onChange('time', `${String(nextH).padStart(2, '0')}:${currentM}`);
+            };
+
+            return (
+              <div className="flex flex-col items-center">
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  type="button"
+                  onClick={() => updateHour(1)}
+                  className="w-9 h-6 flex items-center justify-center text-pink-500 hover:text-pink-600 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
+                >
+                  ▲
+                </motion.button>
+                <div className="w-14 h-11 bg-white rounded-xl border-2 border-pink-300 shadow-2xs flex items-center justify-center text-xl font-black text-gray-800">
+                  {String(currentH).padStart(2, '0')}
+                </div>
+                <span className="text-[9px] text-gray-400 mt-0.5 font-semibold">Giờ</span>
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  type="button"
+                  onClick={() => updateHour(-1)}
+                  className="w-9 h-6 flex items-center justify-center text-pink-500 hover:text-pink-600 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
+                >
+                  ▼
+                </motion.button>
+              </div>
+            );
+          })()}
+
+          <span className="text-pink-400 font-black text-2xl -mt-4 animate-pulse">:</span>
+
+          {/* Khối Phút */}
+          {(() => {
+            const currentH = selections.time.match(/^(\d{2}):/)?.[1] || '19';
+            const currentM = parseInt(selections.time.match(/:(\d{2})/)?.[1] || '30', 10);
+
+            const updateMin = (delta: number) => {
+              let nextM = currentM + delta;
+              if (nextM < 0) nextM = 59;
+              if (nextM > 59) nextM = 0;
+              onChange('time', `${currentH}:${String(nextM).padStart(2, '0')}`);
+            };
+
+            return (
+              <div className="flex flex-col items-center">
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  type="button"
+                  onClick={() => updateMin(1)}
+                  className="w-9 h-6 flex items-center justify-center text-pink-500 hover:text-pink-600 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
+                >
+                  ▲
+                </motion.button>
+                <div className="w-14 h-11 bg-white rounded-xl border-2 border-pink-300 shadow-2xs flex items-center justify-center text-xl font-black text-gray-800 select-none">
+                  {String(currentM).padStart(2, '0')}
+                </div>
+                <span className="text-[9px] text-gray-400 mt-0.5 font-semibold">Phút</span>
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  type="button"
+                  onClick={() => updateMin(-1)}
+                  className="w-9 h-6 flex items-center justify-center text-pink-500 hover:text-pink-600 font-bold hover:bg-pink-100 rounded-lg cursor-pointer"
+                >
+                  ▼
+                </motion.button>
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* Nút bấm nhanh khung giờ */}
+        <div className="grid grid-cols-4 gap-1.5 pt-0.5">
+          {TIME_SUGGESTIONS.map((t) => {
+            const isActive = selections.time === t;
+            return (
+              <button
+                key={t}
+                type="button"
+                onClick={() => onChange('time', t)}
+                className={`py-1.5 px-1 rounded-xl text-center text-xs font-bold transition-all cursor-pointer border ${
+                  isActive
+                    ? 'border-pink-500 bg-pink-100 text-pink-600 shadow-2xs'
+                    : 'border-pink-100 bg-white text-gray-700 hover:bg-pink-50'
                 }`}
+              >
+                {t}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Điểm đón */}
+        <div className="pt-1 space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-gray-600 flex items-center gap-1">
+              <span>📍</span> Điểm đón:
+            </span>
+            <span className="text-[10px] text-pink-500 font-medium">(Trang đổi địa chỉ nếu muốn nhé)</span>
+          </div>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Nhập địa chỉ đón nếu muốn đổi..."
+              value={selections.customTime}
+              onChange={(e) => onChange('customTime', e.target.value)}
+              className="w-full pl-3 pr-20 py-2 rounded-xl border border-pink-200 text-xs text-gray-800 font-medium focus:outline-none focus:border-pink-400 bg-white shadow-2xs"
+            />
+            {selections.customTime !== 'Kí túc xá AOF' && (
+              <button
+                type="button"
+                onClick={() => onChange('customTime', 'Kí túc xá AOF')}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] text-pink-600 hover:text-pink-700 bg-pink-50 hover:bg-pink-100 px-2 py-0.5 rounded-lg border border-pink-200 cursor-pointer font-medium"
+              >
+                KTX AOF
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Điều khoản vui vẻ */}
+      <div className="space-y-1.5">
+        <p className="text-xs font-bold text-gray-700 flex items-center gap-1">
+          <span>📋</span> Điều khoản vui vẻ:
+        </p>
+        <div className="space-y-1.5">
+          {TERMS_DEFAULT.map((term) => (
+            <button
+              key={term}
+              type="button"
+              onClick={() => toggleTerm(term)}
+              className={`w-full text-left px-3 py-2 rounded-xl border transition-all flex items-start gap-2 cursor-pointer ${
+                selections.terms.includes(term)
+                  ? 'border-pink-300 bg-pink-50/70 text-gray-800'
+                  : 'border-gray-200 bg-white opacity-60 text-gray-500'
+              }`}
             >
-              <span className="text-lg mt-0.5">
-                {selections.terms.includes(term) ? '☑️' : '⬜'}
-              </span>
-              <span className="text-xs text-gray-700 leading-relaxed">{term}</span>
-            </motion.button>
+              <span className="text-sm mt-0.5">{selections.terms.includes(term) ? '☑️' : '⬜'}</span>
+              <span className="text-[11px] leading-relaxed flex-1">{term}</span>
+            </button>
           ))}
         </div>
       </div>
 
-      <div className="bg-pink-50/80 rounded-2xl p-3.5 text-center">
-        <p className="text-xs text-pink-600 font-medium">
-          {selections.terms.length === TERMS_DEFAULT.length
-            ? '🎉 Đã chốt trọn bộ điều khoản! Giờ thì xem vé thôi nào~'
-            : `Đã chốt ${selections.terms.length}/${TERMS_DEFAULT.length} điều khoản`}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// ─── STEP 4: BOARDING PASS & CHỐT ĐƠN ────────────────────────────────────────
-function Step4Ticket({
-  selections,
-  onSubmit,
-  submitting,
-  done,
-}: {
-  selections: Selections;
-  onSubmit: () => void;
-  submitting: boolean;
-  done: boolean;
-}) {
-  const selectedTimeObj = TIME_OPTIONS.find((t) => t.id === selections.time);
-  const timeLabel = selections.time === 'custom'
-    ? (selections.customTime ? `Giờ linh hoạt: ${selections.customTime}` : 'Giờ linh hoạt (Trang chọn sau 19:00)')
-    : (selectedTimeObj?.label || '—');
-  const moodLabel = MOOD_OPTIONS.find((m) => m.id === selections.mood)?.label || '—';
-  const foodItem = FOOD_OPTIONS.find((f) => f.id === selections.food);
-  const foodLabel = foodItem?.label || '—';
-  const actItem = ACTIVITY_OPTIONS.find((a) => a.id === selections.activity);
-  const actLabel = actItem?.label || '—';
-
-  return (
-    <div className="space-y-4">
-      <h2 className="text-base font-bold text-pink-600 text-center">🎫 Boarding Pass Buổi Hẹn Đầu</h2>
-
+      {/* Tấm vé Boarding Pass */}
       <div className="relative bg-white rounded-3xl shadow-xl shadow-pink-100 overflow-hidden border border-pink-100">
-        <div className="bg-gradient-to-r from-pink-500 to-rose-400 px-5 py-4 text-white">
+        <div className="bg-gradient-to-r from-pink-500 to-rose-400 px-5 py-3.5 text-white">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[10px] opacity-80 uppercase tracking-widest">Hành khách</p>
-              <p className="font-bold text-base">Trang & Dương ✈️</p>
+              <p className="font-bold text-base">Mai Trang & Dương ✈️</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] opacity-80 uppercase tracking-widest">Thời điểm</p>
-              <p className="font-bold text-sm">Sau giờ làm tối</p>
+              <p className="font-bold text-sm">Tối mai · 15/10/2026</p>
             </div>
           </div>
         </div>
@@ -689,21 +1107,24 @@ function Step4Ticket({
           <div className="absolute -right-3 w-6 h-6 rounded-full bg-pink-100" />
         </div>
 
-        <div className="px-5 py-4 space-y-3">
+        <div className="px-5 py-3.5 space-y-2.5">
           {[
-            { label: 'Thời gian đón', value: timeLabel, icon: '⏰' },
-            { label: 'Không khí / Vibe', value: moodLabel, icon: '✨' },
             {
-              label: 'Ăn tối',
-              value: `${foodLabel}${selections.foodDetail ? `\n➥ ${selections.foodDetail}` : ''}${
-                selections.customFood ? `\n(Gợi ý thêm: ${selections.customFood})` : ''
+              label: 'Thời gian đón',
+              value: `${selections.time || '19:30'} (Dương qua đón tận nơi)\n➥ Điểm đón: ${
+                selections.customTime || 'Kí túc xá AOF'
               }`,
+              icon: '⏰',
+            },
+            {
+              label: 'Bữa tối',
+              value: finalFoodLabel,
               icon: '🍽️',
             },
             {
-              label: 'Sau bữa tối',
-              value: `${actLabel}${selections.activityDetail ? `\n➥ ${selections.activityDetail}` : ''}`,
-              icon: '📍',
+              label: 'Kế hoạch sau ăn',
+              value: finalActivityLabel,
+              icon: currentParent.icon,
             },
           ].map((row) => (
             <div key={row.label} className="flex items-start gap-2.5">
@@ -716,7 +1137,7 @@ function Step4Ticket({
           ))}
         </div>
 
-        <div className="bg-gray-50 px-5 py-2.5 flex justify-center">
+        <div className="bg-gray-50 px-5 py-2 flex justify-center">
           <div className="flex gap-0.5">
             {Array.from({ length: 32 }).map((_, i) => (
               <div
@@ -724,7 +1145,7 @@ function Step4Ticket({
                 className="bg-gray-300 rounded-sm"
                 style={{
                   width: i % 3 === 0 ? 3 : 1.5,
-                  height: i % 5 === 0 ? 24 : 16,
+                  height: i % 5 === 0 ? 20 : 14,
                 }}
               />
             ))}
@@ -752,7 +1173,7 @@ function Step4Ticket({
           <p className="font-bold text-green-700 text-sm">Chốt kèo thành công rực rỡ!</p>
           <p className="text-xs text-green-600 leading-relaxed">
             Tin nhắn đã báo về điện thoại của anh rồi nha.<br />
-            Hẹn Trang tối hôm đó, chuẩn bị đón người đẹp thôi! 🌸
+            Hẹn Trang tối mai (15/10), chuẩn bị đón người đẹp thôi! 🌸
           </p>
         </motion.div>
       )}
@@ -770,19 +1191,20 @@ export default function Page() {
   const [done, setDone] = useState(false);
 
   const [selections, setSelections] = useState<Selections>({
-    time: '19h00',
-    customTime: '19:15',
-    mood: 'quiet',
-    food: 'bbq',
-    foodDetail: FOOD_OPTIONS[0].suggestions[0],
+    time: '19:30',
+    customTime: 'Kí túc xá AOF',
+    food: ALL_FOODS[0].name,
     customFood: '',
-    activity: 'cafe',
-    activityDetail: ACTIVITY_OPTIONS[0].suggestions[0],
+    parentActivity: PARENT_ACTIVITIES[0].id,
+    activityDetail: PARENT_ACTIVITIES[0].subOptions[0].title,
+    customActivity: '',
     terms: [...TERMS_DEFAULT],
+    spinCount: 0,
+    isFoodFromSpin: false,
   });
 
   const handleChange = useCallback(
-    (key: keyof Selections, val: string | string[]) => {
+    (key: keyof Selections, val: any) => {
       setSelections((prev) => ({ ...prev, [key]: val }));
     },
     []
@@ -799,20 +1221,39 @@ export default function Page() {
   };
 
   const canNext = () => {
-    if (step === 1) return !!selections.time && !!selections.mood;
-    if (step === 2) return !!selections.food && !!selections.activity;
+    if (step === 1) return !!selections.food || !!selections.customFood;
+    if (step === 2) return !!selections.parentActivity;
+    if (step === 3) return !!selections.activityDetail || !!selections.customActivity;
     return true;
   };
 
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      const foodItem = FOOD_OPTIONS.find((f) => f.id === selections.food);
-      const actItem = ACTIVITY_OPTIONS.find((a) => a.id === selections.activity);
-      const selectedTimeObj = TIME_OPTIONS.find((t) => t.id === selections.time);
-      const finalTime = selections.time === 'custom'
-        ? (selections.customTime ? `Giờ linh hoạt: ${selections.customTime}` : 'Giờ linh hoạt (sau 19:00)')
-        : selectedTimeObj?.label;
+      const currentParent =
+        PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity) || PARENT_ACTIVITIES[0];
+      const finalTime = `${selections.time || '19:30'} (Dương qua đón tận nơi)${
+        selections.customTime ? ` [Điểm đón: ${selections.customTime}]` : ''
+      }`;
+      const finalFood = selections.customFood
+        ? `${selections.customFood} (Trang chọn riêng)`
+        : selections.food;
+      const finalActivityDetail = selections.customActivity
+        ? `${selections.customActivity} (Trang chọn riêng)`
+        : selections.activityDetail;
+
+      let foodSelectionMode = '';
+      if (selections.customFood) {
+        foodSelectionMode = '✍️ Trang tự gõ món riêng';
+      } else if (selections.isFoodFromSpin) {
+        foodSelectionMode = `🎲 Chọn qua quay Random (sau ${selections.spinCount} lần bấm quay)`;
+      } else {
+        if (selections.spinCount > 0) {
+          foodSelectionMode = `👆 Trang tự chọn trong danh sách (đã bấm quay thử ${selections.spinCount} lần)`;
+        } else {
+          foodSelectionMode = '👆 Trang tự chọn trực tiếp (không bấm quay random)';
+        }
+      }
 
       const res = await fetch('/api/notify', {
         method: 'POST',
@@ -820,11 +1261,11 @@ export default function Page() {
         body: JSON.stringify({
           ...selections,
           time: finalTime,
-          mood: MOOD_OPTIONS.find((m) => m.id === selections.mood)?.label,
-          food: foodItem?.label,
-          foodDetail: selections.foodDetail,
-          activity: actItem?.label,
-          activityDetail: selections.activityDetail,
+          food: finalFood,
+          parentActivity: currentParent.name,
+          activityDetail: finalActivityDetail,
+          foodSelectionMode,
+          spinCount: selections.spinCount,
         }),
       });
 
@@ -850,46 +1291,47 @@ export default function Page() {
     }
   };
 
-  const stepTitles = ['', 'Giờ hẹn & Vibe', 'Món ăn & Địa điểm', 'Điều khoản', 'Xác nhận vé'];
+  const stepTitles = ['', 'Chiếc bụng đói', 'Tiếp theo làm gì?', 'Chi tiết kế hoạch', 'Tấm vé hẹn hò'];
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-6">
-      <div className="w-full max-w-sm my-auto">
+    <main className="min-h-screen flex items-center justify-center px-3 py-4 sm:px-4 sm:py-6 overflow-x-hidden w-full">
+      <div className="w-full max-w-md mx-auto my-auto">
         {step > 0 && (
-          <div className="flex items-center gap-3 mb-4">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              onClick={goBack}
-              className="w-9 h-9 rounded-full bg-white/90 border border-pink-200 text-pink-500 shadow-sm flex items-center justify-center transition-colors hover:bg-pink-50 cursor-pointer shrink-0"
-              title="Quay lại"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          <header className="sticky top-2 z-30 mb-2.5 bg-white/95 backdrop-blur-md rounded-2xl border border-pink-100 shadow-sm overflow-hidden w-full">
+            <ThinProgressBar step={step} total={TOTAL_STEPS - 1} />
+            <div className="flex items-center gap-2 px-3 pb-2 pt-0.5 sm:px-3.5 sm:pb-2.5">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                onClick={goBack}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pink-50 border border-pink-200 text-pink-500 shadow-2xs flex items-center justify-center transition-colors hover:bg-pink-100 cursor-pointer shrink-0"
+                title="Quay lại"
               >
-                <path d="m15 18-6-6 6-6" />
-              </svg>
-            </motion.button>
-            <div className="flex-1">
-              <p className="text-[10px] text-pink-400 uppercase tracking-widest font-bold">
-                Bước {step} / {TOTAL_STEPS - 1}
-              </p>
-              <p className="text-sm font-extrabold text-gray-700">{stepTitles[step]}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </motion.button>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] text-pink-500 font-bold uppercase tracking-wider">
+                  Bước {step} / {TOTAL_STEPS - 1}
+                </p>
+                <p className="text-xs sm:text-sm font-extrabold text-gray-800 truncate">{stepTitles[step]}</p>
+              </div>
             </div>
-          </div>
+          </header>
         )}
 
-        {step > 0 && <ProgressDots current={step - 1} total={TOTAL_STEPS - 1} />}
-
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-xl shadow-pink-100 p-5 border border-white">
+        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl shadow-pink-100 p-3.5 sm:p-5 border border-white w-full overflow-hidden">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={step}
@@ -899,29 +1341,35 @@ export default function Page() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.28, ease: 'easeInOut' }}
+              className="w-full"
             >
               {step === 0 && <Step0Landing onNext={goNext} />}
               {step === 1 && (
-                <Step1TimeMood
+                <Step1Food
                   selections={selections}
-                  onChange={(k, v) => handleChange(k, v as string)}
+                  onChange={(k, v) => handleChange(k, v)}
                 />
               )}
               {step === 2 && (
-                <Step2FoodActivity
+                <Step2ActivityParent
                   selections={selections}
-                  onChange={(k, v) => handleChange(k, v as string)}
+                  onChange={(k, v) => handleChange(k, v)}
                 />
               )}
               {step === 3 && (
-                <Step3Checklist
+                <Step3ActivityDetail
                   selections={selections}
-                  onChange={(k, v) => handleChange(k, v as string[])}
+                  onChange={(k, v) => handleChange(k, v)}
+                  onBackToParent={() => {
+                    setDirection(-1);
+                    setStep(2);
+                  }}
                 />
               )}
               {step === 4 && (
                 <Step4Ticket
                   selections={selections}
+                  onChange={handleChange}
                   onSubmit={handleSubmit}
                   submitting={submitting}
                   done={done}
@@ -932,20 +1380,31 @@ export default function Page() {
         </div>
 
         {step > 0 && step < 4 && (
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: canNext() ? 1 : 0.4, y: 0 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={goNext}
-            disabled={!canNext()}
-            className="mt-3.5 w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold text-sm shadow-lg shadow-pink-200 cursor-pointer disabled:cursor-not-allowed"
-          >
-            {step === 3 ? 'Xem vé hẹn hò 🎫' : 'Tiếp theo →'}
-          </motion.button>
+          <div className="sticky bottom-2 z-30 mt-3 bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-pink-100 shadow-xl flex items-center justify-between gap-2 w-full">
+            <div className="min-w-0 flex-1 pl-1">
+              <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Đã chọn:</p>
+              <p className="text-xs font-extrabold text-pink-600 truncate max-w-[170px] sm:max-w-[220px]">
+                {step === 1
+                  ? selections.customFood || selections.food || 'Chưa chọn món'
+                  : step === 2
+                  ? PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity)?.name || ''
+                  : selections.customActivity || selections.activityDetail || ''}
+              </p>
+            </div>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              onClick={goNext}
+              disabled={!canNext()}
+              className="py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold text-xs shadow-md shadow-pink-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 whitespace-nowrap"
+            >
+              {step === 3 ? 'Xem vé hẹn hò 🎫' : 'Tiếp theo →'}
+            </motion.button>
+          </div>
         )}
 
         <p className="text-center text-[11px] text-gray-400 mt-5">
-          Made with 💖 · Dành riêng cho Trang
+          Thiết kế bằng cả trái tim 💖 · Dành riêng cho Mai Trang
         </p>
       </div>
     </main>
