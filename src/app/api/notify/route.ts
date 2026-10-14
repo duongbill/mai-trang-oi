@@ -4,9 +4,9 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    const termsText = data.terms && data.terms.length > 0
-      ? data.terms.join('\n        ✅ ')
-      : 'Tất cả điều khoản đã đồng ý';
+    const termsSection = data.terms && data.terms.length > 0
+      ? `\n📋 <b>Điều khoản đã duyệt:</b>\n        ✅ ${data.terms.join('\n        ✅ ')}\n`
+      : '';
 
     const message = `
 🎉 <b>MAI TRANG VỪA CHỐT LỊCH HẸN RỒI!</b> 🎉
@@ -20,11 +20,7 @@ export async function POST(req: Request) {
 🔢 <b>Số lần bấm Random:</b> ${data.spinCount ?? 0} lần
 
 🎯 <b>Hoạt động:</b> ${data.parentActivity || ''}
-📍 <b>Chi tiết:</b> ${data.activityDetail || data.activity || 'Chưa chọn'}
-
-📋 <b>Điều khoản đã duyệt:</b>
-        ✅ ${termsText}
-
+📍 <b>Chi tiết:</b> ${data.activityDetail || data.activity || 'Chưa chọn'}${termsSection}
 ━━━━━━━━━━━━━━━━━━━━━━
 🚀 <i>Buổi hẹn đầu tiên — lên đồ thật bảnh và chuẩn bị đón người đẹp thôi bạn tôi ơi!</i>
     `.trim();

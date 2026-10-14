@@ -190,9 +190,9 @@ const slideVariants = {
 function ThinProgressBar({ step, total }: { step: number; total: number }) {
   const percent = Math.min(100, Math.max(0, (step / total) * 100));
   return (
-    <div className="w-full bg-pink-100/80 h-1.5 rounded-full overflow-hidden mb-2.5 shadow-2xs">
+    <div className="w-full bg-pink-100/70 h-1.5 overflow-hidden">
       <motion.div
-        className="h-full bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500 rounded-full"
+        className="h-full bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500"
         initial={{ width: 0 }}
         animate={{ width: `${percent}%` }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
@@ -894,15 +894,6 @@ function Step4Time({
   selections: Selections;
   onChange: (key: keyof Selections, val: any) => void;
 }) {
-  const toggleTerm = (term: string) => {
-    const current = selections.terms;
-    if (current.includes(term)) {
-      onChange('terms', current.filter((t) => t !== term));
-    } else {
-      onChange('terms', [...current, term]);
-    }
-  };
-
   return (
     <div className="space-y-4 pb-2">
       <div className="text-center space-y-1">
@@ -911,16 +902,16 @@ function Step4Time({
       </div>
 
       {/* Phần chọn giờ đón & điểm đón */}
-      <div className="bg-gradient-to-b from-pink-50/90 to-rose-50/50 p-3.5 rounded-2xl border-2 border-pink-200 shadow-xs space-y-3">
+      <div className="bg-gradient-to-b from-pink-50/80 to-rose-50/30 p-4 rounded-2xl border border-pink-200/80 shadow-xs space-y-3.5">
         <div className="flex items-center justify-between text-xs text-pink-600 font-bold px-1">
           <span>⏰ Giờ đón chính xác (tối mai 15/10):</span>
-          <span className="text-[11px] bg-pink-200/70 text-pink-700 px-2 py-0.5 rounded-full font-semibold">
+          <span className="text-[11px] bg-pink-100 text-pink-600 px-2.5 py-0.5 rounded-full font-bold">
             18h - 23h
           </span>
         </div>
 
         {/* Stepper Dial tăng giảm trực quan */}
-        <div className="flex items-center justify-center gap-3 py-0.5">
+        <div className="flex items-center justify-center gap-3 py-1">
           {/* Khối Giờ */}
           {(() => {
             const currentH = parseInt(selections.time.match(/^(\d{2}):/)?.[1] || '19', 10);
@@ -943,7 +934,7 @@ function Step4Time({
                 >
                   ▲
                 </motion.button>
-                <div className="w-14 h-11 bg-white rounded-xl border-2 border-pink-300 shadow-2xs flex items-center justify-center text-xl font-black text-gray-800">
+                <div className="w-14 h-11 bg-white rounded-xl border border-pink-200 shadow-2xs flex items-center justify-center text-xl font-black text-gray-800">
                   {String(currentH).padStart(2, '0')}
                 </div>
                 <span className="text-[9px] text-gray-400 mt-0.5 font-semibold">Giờ</span>
@@ -983,7 +974,7 @@ function Step4Time({
                 >
                   ▲
                 </motion.button>
-                <div className="w-14 h-11 bg-white rounded-xl border-2 border-pink-300 shadow-2xs flex items-center justify-center text-xl font-black text-gray-800 select-none">
+                <div className="w-14 h-11 bg-white rounded-xl border border-pink-200 shadow-2xs flex items-center justify-center text-xl font-black text-gray-800 select-none">
                   {String(currentM).padStart(2, '0')}
                 </div>
                 <span className="text-[9px] text-gray-400 mt-0.5 font-semibold">Phút</span>
@@ -1047,30 +1038,6 @@ function Step4Time({
               </button>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Điều khoản vui vẻ */}
-      <div className="space-y-1.5">
-        <p className="text-xs font-bold text-gray-700 flex items-center gap-1">
-          <span>📋</span> Điều khoản vui vẻ:
-        </p>
-        <div className="space-y-1.5">
-          {TERMS_DEFAULT.map((term) => (
-            <button
-              key={term}
-              type="button"
-              onClick={() => toggleTerm(term)}
-              className={`w-full text-left px-3 py-2 rounded-xl border transition-all flex items-start gap-2 cursor-pointer ${
-                selections.terms.includes(term)
-                  ? 'border-pink-300 bg-pink-50/70 text-gray-800'
-                  : 'border-gray-200 bg-white opacity-60 text-gray-500'
-              }`}
-            >
-              <span className="text-sm mt-0.5">{selections.terms.includes(term) ? '☑️' : '⬜'}</span>
-              <span className="text-[11px] leading-relaxed flex-1">{term}</span>
-            </button>
-          ))}
         </div>
       </div>
     </div>
@@ -1314,123 +1281,126 @@ export default function Page() {
   const stepTitles = ['', 'Chiếc bụng đói', 'Tiếp theo làm gì?', 'Chi tiết kế hoạch', 'Thời gian đón', 'Tấm vé hẹn hò'];
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-3 py-4 sm:px-4 sm:py-6 overflow-x-hidden w-full">
-      <div className="w-full max-w-md mx-auto my-auto">
-        {step > 0 && (
-          <header className="sticky top-2 z-30 mb-2.5 bg-white/95 backdrop-blur-md rounded-2xl border border-pink-100 shadow-sm overflow-hidden w-full">
-            <ThinProgressBar step={step} total={TOTAL_STEPS - 1} />
-            <div className="flex items-center gap-2 px-3 pb-2 pt-0.5 sm:px-3.5 sm:pb-2.5">
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                onClick={goBack}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pink-50 border border-pink-200 text-pink-500 shadow-2xs flex items-center justify-center transition-colors hover:bg-pink-100 cursor-pointer shrink-0"
-                title="Quay lại"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+    <main className="min-h-screen flex items-center justify-center p-3 sm:p-6 overflow-x-hidden w-full">
+      <div className="w-full max-w-md mx-auto my-auto flex flex-col items-center">
+        {/* Khung Phone Card nguyên khối duy nhất */}
+        <div className="w-full bg-white/95 backdrop-blur-md rounded-[28px] sm:rounded-[32px] shadow-2xl shadow-pink-200/50 border border-pink-100/90 overflow-hidden flex flex-col transition-all">
+          {step > 0 && (
+            <header className="bg-white/95 backdrop-blur-sm border-b border-pink-100/70 shrink-0">
+              <ThinProgressBar step={step} total={TOTAL_STEPS - 1} />
+              <div className="flex items-center gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5">
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  onClick={goBack}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pink-50 border border-pink-200 text-pink-500 shadow-2xs flex items-center justify-center transition-colors hover:bg-pink-100 cursor-pointer shrink-0"
+                  title="Quay lại"
                 >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </motion.button>
-              <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-pink-500 font-bold uppercase tracking-wider">
-                  Bước {step} / {TOTAL_STEPS - 1}
-                </p>
-                <p className="text-xs sm:text-sm font-extrabold text-gray-800 truncate">{stepTitles[step]}</p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </motion.button>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] text-pink-500 font-bold uppercase tracking-wider">
+                    Bước {step} / {TOTAL_STEPS - 1}
+                  </p>
+                  <p className="text-xs sm:text-sm font-extrabold text-gray-800 truncate">{stepTitles[step]}</p>
+                </div>
               </div>
-            </div>
-          </header>
-        )}
+            </header>
+          )}
 
-        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl shadow-pink-100 p-3.5 sm:p-5 border border-white w-full overflow-hidden">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={step}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.28, ease: 'easeInOut' }}
-              className="w-full"
-            >
-              {step === 0 && <Step0Landing onNext={goNext} />}
-              {step === 1 && (
-                <Step1Food
-                  selections={selections}
-                  onChange={(k, v) => handleChange(k, v)}
-                />
-              )}
-              {step === 2 && (
-                <Step2ActivityParent
-                  selections={selections}
-                  onChange={(k, v) => handleChange(k, v)}
-                />
-              )}
-              {step === 3 && (
-                <Step3ActivityDetail
-                  selections={selections}
-                  onChange={(k, v) => handleChange(k, v)}
-                  onBackToParent={() => {
-                    setDirection(-1);
-                    setStep(2);
-                  }}
-                />
-              )}
-              {step === 4 && (
-                <Step4Time
-                  selections={selections}
-                  onChange={handleChange}
-                />
-              )}
-              {step === 5 && (
-                <Step5Ticket
-                  selections={selections}
-                  onSubmit={handleSubmit}
-                  submitting={submitting}
-                  done={done}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <div className="p-3.5 sm:p-5 flex-1 overflow-x-hidden">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={step}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.28, ease: 'easeInOut' }}
+                className="w-full"
+              >
+                {step === 0 && <Step0Landing onNext={goNext} />}
+                {step === 1 && (
+                  <Step1Food
+                    selections={selections}
+                    onChange={(k, v) => handleChange(k, v)}
+                  />
+                )}
+                {step === 2 && (
+                  <Step2ActivityParent
+                    selections={selections}
+                    onChange={(k, v) => handleChange(k, v)}
+                  />
+                )}
+                {step === 3 && (
+                  <Step3ActivityDetail
+                    selections={selections}
+                    onChange={(k, v) => handleChange(k, v)}
+                    onBackToParent={() => {
+                      setDirection(-1);
+                      setStep(2);
+                    }}
+                  />
+                )}
+                {step === 4 && (
+                  <Step4Time
+                    selections={selections}
+                    onChange={handleChange}
+                  />
+                )}
+                {step === 5 && (
+                  <Step5Ticket
+                    selections={selections}
+                    onSubmit={handleSubmit}
+                    submitting={submitting}
+                    done={done}
+                  />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {step > 0 && step < 5 && (
+            <div className="border-t border-pink-100/70 bg-gradient-to-r from-pink-50/60 via-white to-pink-50/60 p-2.5 sm:p-3 flex items-center justify-between gap-2 shrink-0">
+              <div className="min-w-0 flex-1 pl-1">
+                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Đã chọn:</p>
+                <p className="text-xs font-extrabold text-pink-600 truncate max-w-[170px] sm:max-w-[220px]">
+                  {step === 1
+                    ? selections.customFood || selections.food || 'Chưa chọn món'
+                    : step === 2
+                    ? PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity)?.name || ''
+                    : step === 3
+                    ? selections.customActivity || selections.activityDetail || ''
+                    : `${selections.time || '19:30'} · ${selections.customTime || 'KTX AOF'}`}
+                </p>
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                onClick={goNext}
+                disabled={!canNext()}
+                className="py-2.5 px-4 sm:py-2.5 sm:px-5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold text-xs shadow-md shadow-pink-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 whitespace-nowrap"
+              >
+                {step === 4 ? 'Xem vé hẹn hò 🎫' : 'Tiếp theo →'}
+              </motion.button>
+            </div>
+          )}
         </div>
 
-        {step > 0 && step < 5 && (
-          <div className="sticky bottom-2 z-30 mt-3 bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-pink-100 shadow-xl flex items-center justify-between gap-2 w-full">
-            <div className="min-w-0 flex-1 pl-1">
-              <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Đã chọn:</p>
-              <p className="text-xs font-extrabold text-pink-600 truncate max-w-[170px] sm:max-w-[220px]">
-                {step === 1
-                  ? selections.customFood || selections.food || 'Chưa chọn món'
-                  : step === 2
-                  ? PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity)?.name || ''
-                  : step === 3
-                  ? selections.customActivity || selections.activityDetail || ''
-                  : `${selections.time || '19:30'} · ${selections.customTime || 'KTX AOF'}`}
-              </p>
-            </div>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={goNext}
-              disabled={!canNext()}
-              className="py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold text-xs shadow-md shadow-pink-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 whitespace-nowrap"
-            >
-              {step === 4 ? 'Xem vé hẹn hò 🎫' : 'Tiếp theo →'}
-            </motion.button>
-          </div>
-        )}
-
-        <p className="text-center text-[11px] text-gray-400 mt-5">
+        <p className="text-center text-[11px] text-gray-400 mt-4">
           Thiết kế bằng cả trái tim 💖 · Dành riêng cho Mai Trang
         </p>
       </div>
