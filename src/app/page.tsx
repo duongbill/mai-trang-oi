@@ -129,7 +129,7 @@ const PARENT_ACTIVITIES: ParentActivity[] = [
     name: 'Lượn phố hóng gió',
     icon: '🛵',
     tagline: 'Mùa thu Hà Nội se lạnh, lượn xe hóng gió',
-    vibe: 'Lãng mạn & Thu Hà Nội',
+    vibe: 'Hóng gió & Thu Hà Nội',
     subOptions: [
       {
         id: 'street-ho-tay',
@@ -886,29 +886,14 @@ function Step3ActivityDetail({
   );
 }
 
-// ─── STEP 4: ĐIỀU KHOẢN VUI VẺ & XUẤT VÉ HẸN HÒ ─────────────────────────────
-function Step4Ticket({
+// ─── STEP 4: THỜI GIAN & ĐỊA ĐIỂM ĐÓN ─────────────────────────────────────────
+function Step4Time({
   selections,
   onChange,
-  onSubmit,
-  submitting,
-  done,
 }: {
   selections: Selections;
-  onChange: (key: keyof Selections, val: string | string[]) => void;
-  onSubmit: () => void;
-  submitting: boolean;
-  done: boolean;
+  onChange: (key: keyof Selections, val: any) => void;
 }) {
-  const currentParent =
-    PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity) || PARENT_ACTIVITIES[0];
-  const finalFoodLabel = selections.customFood
-    ? `Món riêng Trang chọn: ${selections.customFood}`
-    : selections.food;
-  const finalActivityLabel = selections.customActivity
-    ? `${currentParent.name} ➜ ${selections.customActivity}`
-    : `${currentParent.name} ➜ ${selections.activityDetail}`;
-
   const toggleTerm = (term: string) => {
     const current = selections.terms;
     if (current.includes(term)) {
@@ -920,7 +905,10 @@ function Step4Ticket({
 
   return (
     <div className="space-y-4 pb-2">
-      <h2 className="text-base font-bold text-pink-600 text-center">🎫 Tấm Vé Buổi Hẹn Đầu Tiên</h2>
+      <div className="text-center space-y-1">
+        <h2 className="text-base font-bold text-pink-600">⏰ Thời Gian & Đón Nàng</h2>
+        <p className="text-xs text-gray-500">Dương sẽ qua đón Trang đúng giờ để kịp bữa tối ấm áp nha</p>
+      </div>
 
       {/* Phần chọn giờ đón & điểm đón */}
       <div className="bg-gradient-to-b from-pink-50/90 to-rose-50/50 p-3.5 rounded-2xl border-2 border-pink-200 shadow-xs space-y-3">
@@ -1085,6 +1073,37 @@ function Step4Ticket({
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── STEP 5: XUẤT VÉ HẸN HÒ & CHỐT LỊCH ─────────────────────────────────────
+function Step5Ticket({
+  selections,
+  onSubmit,
+  submitting,
+  done,
+}: {
+  selections: Selections;
+  onSubmit: () => void;
+  submitting: boolean;
+  done: boolean;
+}) {
+  const currentParent =
+    PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity) || PARENT_ACTIVITIES[0];
+  const finalFoodLabel = selections.customFood
+    ? `Món riêng Trang chọn: ${selections.customFood}`
+    : selections.food;
+  const finalActivityLabel = selections.customActivity
+    ? `${currentParent.name} ➜ ${selections.customActivity}`
+    : `${currentParent.name} ➜ ${selections.activityDetail}`;
+
+  return (
+    <div className="space-y-4 pb-2">
+      <div className="text-center space-y-1">
+        <h2 className="text-base font-bold text-pink-600">🎫 Tấm Vé Buổi Hẹn Đầu Tiên</h2>
+        <p className="text-xs text-gray-500">Mọi thứ đã sẵn sàng cho buổi tối tuyệt vời của chúng mình!</p>
+      </div>
 
       {/* Tấm vé Boarding Pass */}
       <div className="relative bg-white rounded-3xl shadow-xl shadow-pink-100 overflow-hidden border border-pink-100">
@@ -1182,7 +1201,7 @@ function Step4Ticket({
 }
 
 // ─── MAIN PAGE COMPONENT ─────────────────────────────────────────────────────
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 export default function Page() {
   const [step, setStep] = useState(0);
@@ -1224,6 +1243,7 @@ export default function Page() {
     if (step === 1) return !!selections.food || !!selections.customFood;
     if (step === 2) return !!selections.parentActivity;
     if (step === 3) return !!selections.activityDetail || !!selections.customActivity;
+    if (step === 4) return !!selections.time;
     return true;
   };
 
@@ -1291,7 +1311,7 @@ export default function Page() {
     }
   };
 
-  const stepTitles = ['', 'Chiếc bụng đói', 'Tiếp theo làm gì?', 'Chi tiết kế hoạch', 'Tấm vé hẹn hò'];
+  const stepTitles = ['', 'Chiếc bụng đói', 'Tiếp theo làm gì?', 'Chi tiết kế hoạch', 'Thời gian đón', 'Tấm vé hẹn hò'];
 
   return (
     <main className="min-h-screen flex items-center justify-center px-3 py-4 sm:px-4 sm:py-6 overflow-x-hidden w-full">
@@ -1367,9 +1387,14 @@ export default function Page() {
                 />
               )}
               {step === 4 && (
-                <Step4Ticket
+                <Step4Time
                   selections={selections}
                   onChange={handleChange}
+                />
+              )}
+              {step === 5 && (
+                <Step5Ticket
+                  selections={selections}
                   onSubmit={handleSubmit}
                   submitting={submitting}
                   done={done}
@@ -1379,7 +1404,7 @@ export default function Page() {
           </AnimatePresence>
         </div>
 
-        {step > 0 && step < 4 && (
+        {step > 0 && step < 5 && (
           <div className="sticky bottom-2 z-30 mt-3 bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-pink-100 shadow-xl flex items-center justify-between gap-2 w-full">
             <div className="min-w-0 flex-1 pl-1">
               <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Đã chọn:</p>
@@ -1388,7 +1413,9 @@ export default function Page() {
                   ? selections.customFood || selections.food || 'Chưa chọn món'
                   : step === 2
                   ? PARENT_ACTIVITIES.find((p) => p.id === selections.parentActivity)?.name || ''
-                  : selections.customActivity || selections.activityDetail || ''}
+                  : step === 3
+                  ? selections.customActivity || selections.activityDetail || ''
+                  : `${selections.time || '19:30'} · ${selections.customTime || 'KTX AOF'}`}
               </p>
             </div>
             <motion.button
@@ -1398,7 +1425,7 @@ export default function Page() {
               disabled={!canNext()}
               className="py-2 px-4 sm:py-2.5 sm:px-5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold text-xs shadow-md shadow-pink-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 whitespace-nowrap"
             >
-              {step === 3 ? 'Xem vé hẹn hò 🎫' : 'Tiếp theo →'}
+              {step === 4 ? 'Xem vé hẹn hò 🎫' : 'Tiếp theo →'}
             </motion.button>
           </div>
         )}
